@@ -29,6 +29,7 @@
       min-width: 25vw;
       max-width: 25vw;
       max-height: fit-content;
+      margin-right: 1em !important;
   }  
 
   .js-sg-collection-item img[src=""]{

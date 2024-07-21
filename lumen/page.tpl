@@ -120,7 +120,7 @@
                                             </div>
                                         {else}
                                             <div class="text-center">
-                                                <a href="https://my.{$site.url}/account/?oauth=sso&login=step2&token={$token}{$site.id}&requester={$html.sso_requester}" class="btn btn-outline-primary my-2">{'Sign In'|trans}</a>
+                                                <a href="https://{$site.account_url}/account/?oauth=sso&login=step2&token={$token}{$site.id}&requester={$html.sso_requester}" class="btn btn-outline-primary my-2">{'Sign In'|trans}</a>
                                             </div>                                    
                                         {/if}    
                                         </div>

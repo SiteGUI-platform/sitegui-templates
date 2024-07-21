@@ -13,9 +13,9 @@
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.3/lumen/bootstrap.min.css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <!-- Custom fonts for this template-->
-	<script src="{$site.cdn}/{$template}/assets/sitegui.js?v=12" id="sitegui-js" data-locale="{$site.locale|default:$user.language|default:$site.language}" data-currency="{$site.currency.code|default:USD}" data-precision="{$site.currency.precision|default:2}" data-timezone="{$user.timezone|default:$site.timezone|default:UTC}"></script>
+	<script src="{$site.cdn}/{$template}/assets/sitegui.js?v=15" id="sitegui-js" data-locale="{$site.locale|default:$user.language|default:$site.language}" data-currency="{$site.currency.code|default:USD}" data-precision="{$site.currency.precision|default:2}" data-timezone="{$user.timezone|default:$site.timezone|default:UTC}"></script>
 	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600" rel="stylesheet" />	
- 	<link href="{$site.cdn}/{$template}/assets/sitegui.css?v=31" rel="stylesheet" />
+ 	<link href="{$site.cdn}/{$template}/assets/sitegui.css?v=34" rel="stylesheet" />
 	<link rel="shortcut icon" href="{$site.cdn}/{$template}/assets/favicon.png" /> 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
@@ -26,7 +26,7 @@
 
 {block name="block_header"}
 {$block_header nofilter}
-<nav class="navbar navbar-expand-lg navbar-light border-0 bg-white py-4 sg-block-content" data-observer-classes-off="" data-observer-margin="300px">
+<nav class="navbar navbar-expand-lg navbar-light border-0 bg-white py-4 z-1 sg-block-content" data-observer-classes-off="" data-observer-margin="300px">
 	<div class="container-md px-0">
 	  <a class="navbar-brand" href="//{$site.url}"><img class="img-responsive" src="{if $site.logo}{$site.logo}{else}{$site.cdn}/{$template}/assets/logo.png{/if}" alt="Site Logo" style="max-width: 200px;"></a>
 	  <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#sg-id-1646279124182" aria-controls="sg-id-1646279124182" aria-expanded="false" aria-label="Toggle navigation">
@@ -141,7 +141,7 @@
 			{/foreach}
 			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			<script type="text/javascript">
-  				document.addEventListener("DOMContentLoaded", function(e){
+  			document.addEventListener("DOMContentLoaded", function(e){
 					$(".status-message-container").fadeTo(6000, 500).slideUp(500, function(){
 					    $(".status-message-container").alert('close');
 					});

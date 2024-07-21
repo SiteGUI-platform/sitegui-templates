@@ -163,6 +163,7 @@
                     {/foreach}
                     </h6>
                 {/foreach}
+                {block name="content_right"}{$content_right nofilter}{/block}
                 <form action="{$links.cart_add}" method="POST">
                     <input type="hidden" name="item[id]" value="{$api.variants.0.id}" id="js-varid-input" class="{if $html.stock_checking}js-require-stock{/if}">
                     <input type="hidden" name="csrf_token" value="{$token}">
@@ -192,9 +193,8 @@
                     <a href="{$collection.slug}">{$collection.name}</a>{if !$collection@last}, {/if}
                 {/foreach}
                 </p>
-                {block name="content_right"}{$content_right nofilter}{/block}
+                {block name="content_bottom"}{$content_bottom nofilter}{/block}
             </div>
-            {block name="content_bottom"}{$content_bottom nofilter}{/block}
         </div>  
         {if $page.meta.faq}
         <div class="row pb-4">
@@ -367,7 +367,7 @@
                                     </div>
                                 {else}
                                     <div class="text-center">
-                                        <a href="https://my.{$site.url}/account/?oauth=sso&login=step2&token={$token}{$site.id}&requester={$html.sso_requester}" class="btn btn-outline-primary my-2">{'Sign In'|trans}</a>
+                                        <a href="https://{$site.account_url}/account/?oauth=sso&login=step2&token={$token}{$site.id}&requester={$html.sso_requester}" class="btn btn-outline-primary my-2">{'Sign In'|trans}</a>
                                     </div>                                    
                                 {/if}    
                                 </div>
@@ -481,8 +481,8 @@ document.addEventListener("DOMContentLoaded", function(e){
                 $_('#product-main-carousel [data-bs-slide-to]'+ selector) && $_('#product-main-carousel [data-bs-slide-to]'+ selector).classList.add('active')            
             } 
             //display first option's text when any option is chosen (not just the 1st opt)
-            $_('.js-first-opt:not(.d-none)') && $_('.js-first-opt:not(.d-none)').classList.add('d-none')
-            $_('.js-first-opt' + selector)   && $_('.js-first-opt' + selector).classList.remove('d-none') //first matched
+            $$('.js-first-opt:not(.d-none)') && $$('.js-first-opt:not(.d-none)').forEach(el => el.classList.add('d-none') )
+            $$('.js-first-opt' + selector)   && $$('.js-first-opt' + selector).forEach(el => el.classList.remove('d-none') )    
             //display price
             $_('[data-varid].js-sg-price:not(.d-none)') && $_('[data-varid].js-sg-price:not(.d-none)').classList.add('d-none')
             //just select the first matched (stocked) varid

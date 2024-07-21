@@ -59,6 +59,11 @@ a:active:not([class]) > *, a:focus:not([class]) > * {
     top: -1px;
 }
 
+.text-lime,
+.hover-lime:hover {
+  color: rgb(222,255,0) !important;
+}
+
 #footer {
     padding: 30px 0;
 	background-color: #282B2D;
@@ -272,25 +277,31 @@ h5, a:hover, .menu-dropdown a.level3:hover, .menu-sidebar a:hover > span, .menu-
 img.no-image {
     margin-top: 30px;
 }
-
+span[class*="status__"] {
+    padding: 0 3px;
+    border-radius: 3px;
+}
 .status__active,
 .status__paid,
 .status__open,
 .status__to_do,
 .status__requested {
     background-color: lightgreen;
+    color: #000;
 }
 .status__awaiting_confirmation,
 .status__pending,
 .status__under_consideration,
 .status__scheduled {
     background-color: azure;
+    color: #000;
 }
 .status__awaiting_fulfillment,
 .status__partially_picked,
 .status__reviewing,
 .status__backlog {
     background-color: paleturquoise;
+    color: #000;
 }
 .status__partially_delivered,
 .status__partially_received,
@@ -298,6 +309,7 @@ img.no-image {
 .status__in-progress,
 .status__doing {
     background-color: cyan;
+    color: #000;
 }
 .status__partially_packed,
 .status__awaiting_shipment,
@@ -305,6 +317,7 @@ img.no-image {
 .status__to_be_released,
 .status__approved {
     background-color: khaki;
+    color: #000;
 }
 .status__shipped,
 .status__in_transit,
@@ -313,6 +326,7 @@ img.no-image {
 .status__completed,
 .status__released {
     background-color: gold;
+    color: #000;
 }
 
 .status__delivered {
@@ -324,20 +338,25 @@ img.no-image {
 .status__unpaid,
 .status__rejected {
     background-color: lightgrey;
+    color: #000;
 }
 .status__returned,
 .status__void {
     background-color: lightsteelblue;
+    color: #000;
 }
 .status__returning {
     background-color: thistle;
+    color: #000;
 }
 .status__tba {
     background-color: mistyrose;
+    color: #000;
 }
 .status__disputed,
 .status__re-opened {
     background-color: lightcoral;
+    color: #000;
 }
 
 .bootgrid-header .searchBar{

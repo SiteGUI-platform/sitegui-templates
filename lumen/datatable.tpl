@@ -109,6 +109,21 @@
 		    }		
 				var formatters = {
 					status: function(column, row){
+						let cls = 'status__'+ (row.status? row.status.replaceAll(' ', '_').toLowerCase() : '')
+						let rgb = {}
+						if ( row.status && ! $('style[for="'+ cls +'"]').length ){
+							//change constant 25 to adjust color pastel
+							rgb.v = row.status.replaceAll(' ','')
+							rgb.r = rgb.v.charCodeAt(0)*25 % 255
+							rgb.g = rgb.v.charCodeAt(Math.floor(rgb.v.length/2))*25 % 255
+							rgb.b = rgb.v.charCodeAt(rgb.v.length-3)*25 % 255
+							if ( (rgb.v.startsWith('Re') || rgb.v.startsWith('Ca')) && rgb.v.endsWith('ed')
+							){ //grey
+								rgb.r = rgb.g = rgb.b = Math.floor((rgb.r + rgb.g + rgb.b)/3)
+							}
+							rgb.tc = (rgb.r*0.299 + rgb.g*0.587 + rgb.b*0.114) > 149? '#000000' : '#FFFFFF';							
+							$('<style for="'+ cls +'">.'+ cls +'{ldelim}background-color: rgb('+ rgb.r +','+ rgb.g +','+ rgb.b +'); color: '+ rgb.tc +'}</style>').prependTo($('head'))
+						}	
 						return $('<span>')
 							.addClass('status__'+ (row.status? row.status.replaceAll(' ', '_').toLowerCase() : '') )
 							.text(row.status)
@@ -240,8 +255,8 @@
 				    					</div>\
 				    					<div class="col-sm-9">\
 				    						<div class="card-body h-100 d-flex flex-column">\
-				    							<div class="col card-text sg-content pb-3">\
-				    								{$subpage.content|strip_tags}\
+				    							<div class="col card-text pb-3">\
+				    								<span class="sg-content">{$subpage.content|strip_tags}</span>\
 					    							<p class="card-text mt-2">\
 					    								<i class="sg-attachment"><a href="#" data-bs-toggle="modal" data-bs-target="#dynamicModal" data-title="{"Preview"|trans}" data-url="{$attachment}"></a></i>\
 					    							</p>\
@@ -287,8 +302,8 @@
 			    				}
 			    				sgView.showHeaderFields($row, ajaxResponse, t.find('.sg-content'), 1)
 
-			    				if ($row[response.html.current_app.toLowerCase() +'_attachment']) {
-			    					$row[response.html.current_app.toLowerCase() +'_attachment'].forEach ($attachment =>{
+			    				if ($row.attachments || $row.attachment) {
+			    					( $row.attachments || $row.attachment).forEach ($attachment =>{
 			    						t.find('.sg-attachment')
 			    						 .clone()
 			    						 .insertBefore( t.find('.sg-attachment') )
@@ -329,7 +344,7 @@
 			    					})
 			    					if (ajaxResponse.links && ajaxResponse.links.edit){
 			    						$('<a class="py-0" href="#" data-bs-toggle="modal" data-bs-target="#dynamicModal"><i class="bi bi-patch-plus"></a>')
-			    							.attr('data-url', 'https://my.{$site.url}/account/app/view'+ ajaxResponse.links.edit + '/'+ $row.id + '?sgframe=1&add=1')
+			    							.attr('data-url', 'https://{$site.account_url}/account/app/view'+ ajaxResponse.links.edit + '/'+ $row.id + '?sgframe=1&add=1')
 			    							.attr('data-title', Sitegui.trans('Add'))
 			    							.wrap('<li class="nav-item pe-2 pt-1" />')
 		    								.parent()
@@ -386,6 +401,7 @@
 			 				
 				    		Object.keys(response.html.table_header).forEach( $id => {
 				    			let $header = response.html.table_header[$id];
+				    			let $type = (response.html.column_type && $id in response.html.column_type)? response.html.column_type[$id] : ''
 				    			let $column = {
 							  		id: isNaN($id)? $id : $header.replace(' ', '_').toLowerCase(),
 				            text: $header,
@@ -416,15 +432,16 @@
 										$column.sortable = false
 										$column.headerCssClass += " text-end"
 										$column.formatter = formatters.links
-									} else if ($date_id == 'duration') {
+									} else if ($type == 'duration') {
 										$column.converter =	converters.duration
-									} else if ($date_id.endsWith('date') || $date_id == 'due' || $date_id == "date" || $id == "published"  || $id == "expire" || $id == "updated" || $id == "created" || $id == 'registered' || $id == 'seen'){
+									} else if ($type == 'date' || $type == 'time'){
+									// || $date_id.endsWith('date') || $date_id == 'due' || $date_id == "date" || $id == "published" || $id == "expire" || $id == "updated" || $id == "created" || $id == 'registered' || $id == 'seen'){
 										$column.headerCssClass += " col-date"
 										$column.converter =	converters.datetime
 									} else {
 										if ($id == 'status') {
 											$column.formatter = formatters.status
-										} else if ( $date_id.endsWith('amount') ){
+										} else if ( $type == 'currency' ){
 											$column.converter = converters.currency
 										} else {
 											$column.converter = converters.cleanXSS
@@ -553,7 +570,7 @@
 				    			<h5 class="{if !$forapp}mt-sm-2{/if} text-success sg-app-header">\
 				    				{if !$forapp}\
 				    					{if $links.edit}\
-					    					<a href="https://my.{$site.url}/account/app/view{$links.edit}{$links.edit2}" data-url="https://my.{$site.url}/account/app/view{$links.edit}{$links.edit2}?sgframe=1" data-title="{"New :item"|trans:["item" => $html.current_app|replace: '_':' ']}" class="sg-app-create {if $html.app_readonly}d-none{/if}" data-bs-toggle="modal" data-bs-target="#dynamicModal">\
+					    					<a href="https://{$site.account_url}/account/app/view{$links.edit}{$links.edit2}" data-url="https://{$site.account_url}/account/app/view{$links.edit}{$links.edit2}?sgframe=1" data-title="{"New :item"|trans:["item" => $html.current_app|replace: '_':' ']}" class="sg-app-create {if $html.app_readonly}d-none{/if}" data-bs-toggle="modal" data-bs-target="#dynamicModal">\
 					    						<i class="bi bi-plus-circle-dotted fs-4 ps-sm-2 pe-3"></i></a>\
 				    					{/if}\
 				    					<span class="sg-app-name">{$html.current_app_label|replace: '_':' '}</span>\
@@ -964,19 +981,25 @@
 						container = $('<div class="row row-cols-'+ col +'"></div>').appendTo( container )
 	  				Object.keys(ajaxResponse.html.table_header).forEach( ($id, index) => {
 	  				//$(container +'-header').find('.column-selection .dropdown-item-checkbox:checked').each( (index, el) => {
-	  					if ($id == 'id' || $id == 'name' || (row['name'] == undefined && index == 1) ){ //exclude value of column after id if name is not used, id not checked
+	  					if ($id == 'id' || $id == 'name' || $id == 'slug' || (row['name'] == undefined && index == 1) ){ //exclude value of column after id if name is not used, id not checked
 	  						return;
 	  					}	
 	  					//$id = $(el).attr('data-name')
 	  					$date_id = $id.replace(ajaxResponse.html.current_app.toLowerCase() +'_', '')
 							let $header = ajaxResponse.html.table_header[ $id ]
-			    		if ($id && $header && row[ $id ] && !['name', 'content', 'subtype', 'image', 'status', 'creator', 'published', 'expire', 'registered', 'updated', 'created', 'action'].includes($id) && !['due', 'due_date'].includes($date_id)
+							let $type = (ajaxResponse.html.column_type && $id in ajaxResponse.html.column_type)? ajaxResponse.html.column_type[$id] : ''
+			    		if ($id && $header && row[ $id ] && !['name', 'content', 'subtype', 'image', 'status', 'creator', 'published', 'expire', 'registered', 'updated', 'created', 'action', 'attachment', 'attachments'].includes($id) && !['due', 'due_date'].includes($date_id)
 			    		){
 								let $value = (typeof row[ $id ] === 'object' && row[ $id ] != null)? Object.values(row[ $id ]).join(', ') : row[ $id ]
 								if ($value){
 				    			container.append( 
 				    				$('<div class="col pt-1" />')
-				    				.text(' '+ ($date_id.endsWith('amount')? converters.currency.to($value) : $date_id.endsWith('date')? converters.datetime.to($value) : ($date_id == 'duration')? converters.duration.to($value) : $value) )
+				    				.text(' '+ 
+				    					( ($type == 'currency')? converters.currency.to($value) : 
+				    						($type == 'date' || $type == 'time')? converters.datetime.to($value) : 
+				    						($type == 'duration')? converters.duration.to($value) : $value
+				    					) 
+				    				)
 				    				.prepend( $('<b>').text( $header ) )
 				    			)
 				    		}	

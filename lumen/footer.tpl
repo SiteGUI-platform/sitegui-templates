@@ -1,9 +1,8 @@
 {block name="block_footer"}
-<div id="footer" class="row">
-	<div class="">
+<div id="footer" class="row pb-0">
+	<div class="mb-4">
 		<div class="container-md">
 			<div class="row">
-				<div class="col-md-12">{$block_footer nofilter}</div>
 				<div class="col-md"></div>
 				{foreach from=$html.footer_menu item=level1}
 				<div class="col-md-{math equation='x/y' x=9 y=$html.footer_menu|count format='%d'} d-none d-md-block p-3">
@@ -26,6 +25,7 @@
 			</div>	
 		</div>		
 	</div>
+	<div class="col-md-12">{$block_footer nofilter}</div>
 </div>	
 {/block}
 {block name='block_script'}

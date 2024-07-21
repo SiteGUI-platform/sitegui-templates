@@ -85,7 +85,8 @@
               </style>                    
             </div>
             {/if}
-            <button type="button" class="btn btn-sm btn-outline-light position-relative js-sg-quick-engagement" data-bs-target="#app-Follow-tabpane">Follower</button>
+            <a href="#main-tab" class="btn btn-sm btn-outline-secondary position-relative" data-bs-target="#app-Follow-tabpane" role="tab" aria-controls="app-Follow-tabpane" aria-selected="true" onclick=bootstrap.Tab.getOrCreateInstance(document.querySelector('.nav-link[data-bs-target="#app-Follow-tabpane"]')).show()>Follower</a>
+            </div>  
           </div>  
         </div>  
       </div>  
@@ -185,7 +186,7 @@
   {/foreach}
 {/block}
 
-{block name="content_right"}
+{block name="block_bottom"}
   {if $api.collections_items}
   <div class="col-12 col-md-3 mb-3 pt-3">
     <h6 class="ps-3 pb-2">{'Related Topics'|trans}</h6>
@@ -201,5 +202,5 @@
     </ul>
   </div>
   {/if} 
-  {$content_right nofilter}  
+  {$block_bottom nofilter}  
 {/block} 

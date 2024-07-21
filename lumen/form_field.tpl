@@ -69,7 +69,7 @@
         </div>
         {/if}
       {elseif $field.type == 'image'}
-        <div class="carousel-multi pb-1 w-100" data-length="3" data-slide-to="0" data-noloop="1" data-dynamic="1">
+        <div class="carousel-multi pb-1 w-100 {if $field.is == multiple}multiple-values{/if}" data-length="3" data-slide-to="0" data-noloop="1" data-dynamic="1">
           <div id="target{$form_script_loaded}-{$keyid}" class="carousel-inner item-removable row gx-0">
             {foreach $field.value as $image}
             <div class="col position-relative">
@@ -88,11 +88,11 @@
         </div>
 
         <div class="input-group pb-2 {if $field.is != multiple && $field.value}d-none{/if}">
-          <input id="fid{$form_script_loaded}-{$keyid}" class="form-control get-image-callback {if $field.is == multiple}multiple-values{/if}" data-container="#target-{$keyid}" data-name="{$fieldPrefix}[{$key}][ ]" 
+          <input id="fid{$form_script_loaded}-{$keyid}" class="form-control get-image-callback {if $field.is == multiple}multiple-values{/if}" data-container="#target{$form_script_loaded}-{$keyid}" data-name="{$fieldPrefix}[{$key}][ ]" 
           {if $html.file_manager}
-            type="text" name="{$fieldPrefix}[{$key}][ ]" data-bs-toggle="modal" data-bs-target="#dynamicModal" data-title="{'File Manager'|trans}"
+            type="text" name2="{$fieldPrefix}[{$key}][ ]" data-bs-toggle="modal" data-bs-target="#dynamicModal" data-title="{'File Manager'|trans}"
           {else}
-            type="file" name="{$key}[]" accept="image/*"
+            type="file" name2="{$fieldPrefix}[{$key}][ ]" accept="image/*"
           {/if} {if $field.is == required && !$field.value && $field.visibility != hidden}required{/if}>
           {if $html.file_manager}
             <label class="input-group-text bg-transparent" for="fid{$form_script_loaded}-{$keyid}" role="button"><i class="bi bi-upload"></i></label>
@@ -143,10 +143,12 @@
         {/if} 
       {elseif $field.type == 'radio'}
         {foreach $field.options AS $option => $label}
+          {if $option AND $label}
           <div class="form-check col-form-label">
             <input class="form-check-input" type="radio" name="{$fieldPrefix}[{$key}]" id="field{$form_script_loaded}-{$option}" value="{$option}" {if $option == $field.value}checked{/if} {if $field.is == required && $field.visibility != hidden}required{/if}>
             <label class="form-check-label" for="field{$form_script_loaded}-{$option}">{$label|trans}</label>
           </div>
+          {/if}
         {/foreach}
       {elseif $field.type == 'radio hover'}
         <div class="sg-radio-hover" role="button">
@@ -178,11 +180,11 @@
             background-color: gold;
           }          
         </style>   
-      {elseif $field.type == 'rating' OR $field.type == 'progress'}
+      {elseif $field.type == 'rating' OR $field.type == 'percentage'}
         <input class="sg-rating mt-1" type="range" 
-          {if $field.type == progress}
+          {if $field.type == percentage}
             max="100" step="1" style="--value:{($field.value|default:0|replace:'%':'')}; --star: none; --stars:100; --fill:limegreen; width:100%; margin-top: .6rem !important;"
-            oninput="this.style.setProperty('--value', {literal}`${this.valueAsNumber}`);{/literal}{*/*} document.querySelector('.sg-progress-text.progress{$keyid}').innerText = {literal}`${this.valueAsNumber+'%'}`{/literal}"
+            oninput="this.style.setProperty('--value', {literal}`${this.valueAsNumber}`);{/literal}{*/*} this.parentNode.querySelector('.sg-percentage-text.percentage{$keyid}').innerText = {literal}`${this.valueAsNumber+'%'}`{/literal}"
           {else}
             max="5" step="0.5" style="--value:{$field.value|default:0}; --starsize: 1.8rem;"
             oninput="this.style.setProperty('--value', {literal}`${this.valueAsNumber}`);{/literal}"            
@@ -191,7 +193,7 @@
           {if $field.is == required && $field.visibility != hidden}required{/if} 
           {if $field.visibility == readonly && $field.value}disabled{/if}
         >
-        {if $field.type == progress}<div class="position-relative pe-none"><span class="sg-progress-text progress{$keyid}">{$field.value}</span></div>{/if}
+        {if $field.type == percentage}<div class="position-relative pe-none"><span class="sg-percentage-text percentage{$keyid}">{$field.value}</span></div>{/if}
         <style type="text/css">
           /* Created by Mads Stoumann https://dev.to/madsstoumann/star-rating-using-a-single-input-i0l */
           .sg-rating {
@@ -233,7 +235,7 @@
             width: var(--starsize);
             -webkit-appearance: none;
           }
-          .sg-progress-text {
+          .sg-percentage-text {
             position: absolute;
             top: -1.6rem;
             margin-left: .75rem;
@@ -428,6 +430,26 @@
                   $(this).parent().remove();
           });
     }); 
+
+    //Listener for collapse button to add custom fields to form
+    $('.sg-main').on('show.bs.collapse', function(ev) {
+      if ( $(ev.target).hasClass('collapse-placeholder') ){
+        $(ev.target).append( $('#'+ $(ev.target).attr('id') +'-wrapper' ).children() )
+      }
+    })
+    $('.sg-main').on('hidden.bs.collapse', function(ev) {
+      if ( $(ev.target).hasClass('collapse-placeholder') ){
+        $('#'+ $(ev.target).attr('id') +'-wrapper' ).append( $(ev.target).children() )
+      }
+    })
+
+    $('.sg-main').on('shown.bs.collapse', function(ev) {
+      ev.target.scrollIntoView({
+        behavior: "smooth",
+        block: 'center'
+      });
+    })
+
     //select/upload image
     $('body').on('change', '.get-image-callback', function (e) { 
       if (e.currentTarget.files[0]) { //client upload only
@@ -454,7 +476,7 @@
               URL.revokeObjectURL(src) // free memory
             })
           )
-          .append( $(e.currentTarget).parent().hide() )   
+          .append( $(e.currentTarget).attr('name', name).parent().hide() )   
         )
         .trigger('updated');      
       }  
@@ -470,25 +492,145 @@
         input.parent().removeClass('d-none');
       }
     });
-    //Listener for collapse button to add custom fields to form
-    $('.sg-main').on('show.bs.collapse', function(ev) {
-      if ( $(ev.target).hasClass('collapse-placeholder') ){
-        $(ev.target).append( $('#'+ $(ev.target).attr('id') +'-wrapper' ).children() )
-      }
-    })
-    $('.sg-main').on('hidden.bs.collapse', function(ev) {
-      if ( $(ev.target).hasClass('collapse-placeholder') ){
-        $('#'+ $(ev.target).attr('id') +'-wrapper' ).append( $(ev.target).children() )
-      }
-    })
+    //Multi-item carousel, same children classes as carousel but different root class
+    Sitegui.carousel = function() {
+      var carousel = $(this);
+      var items = carousel.find(".carousel-inner").children().css('opacity', .8);
+      var noloop  = carousel.data("noloop") > 0? 1 : 0; //use data to automaticaly convert Int or use parseInt(carousel.attr("data-noloop")
+      var dynamic = carousel.data("dynamic") > 0? 1 : 0;
+      var length  = (carousel.data("length") && carousel.data("length") <= items.length)? carousel.data("length") : (items.length??1);
+      var current = (carousel.data("slide-to") && carousel.data("slide-to") <= items.length-length*noloop)? carousel.data("slide-to") : 0;
+      var slide = function(i, v) {
+          $(this).removeClass("order-last d-none");
+          if (current >= items.length-length && i < current+length-items.length) {
+              $(this).addClass("order-last"); //looping slide, re-order beginning items 
+          } else if (i < current || i >= current+length) {
+              $(this).addClass("d-none");
+          }      
+      };
+      var update = function(el) {
+          items = carousel.find(".carousel-inner").children(); //update items
+          //length should never be 0
+          if (items.length > carousel.data("length")) {
+              length = carousel.data("length");
+          } else if (items.length > 0){
+              length = items.length;
+          } 
 
-    $('.sg-main').on('shown.bs.collapse', function(ev) {
-      ev.target.scrollIntoView({
-        behavior: "smooth",
-        block: 'center'
-      });
-    })         
-  });  
+          current = (items.length && current > items.length-length*noloop)? items.length-length*noloop : current; 
+          if (current < items.length - length) {
+              carousel.find('[data-bs-slide="prev"]').removeClass("d-none");
+          } else {
+              carousel.find('[data-bs-slide]').addClass("d-none");
+          }
+      }
+      //carousel.attr("data-length", length); //set it for future reference   
+      items.each(slide);
+      if (noloop) {
+          if (current <= 0) {
+              carousel.find('[data-bs-slide="prev"]').addClass('d-none');
+          }  
+          if (current >= items.length - length) { //always have one control incase items.length == length
+              carousel.find('[data-bs-slide="next"]').addClass("d-none");
+          }        
+      }
+
+      //prev, next control
+      carousel.on("click", '[data-bs-slide="next"]', function(ev) {
+         ev.preventDefault();
+         dynamic && update(); 
+         $(this).siblings().removeClass('d-none');
+         current++;
+
+         if (noloop && current >= items.length - length) {
+             $(this).addClass('d-none');
+             if (current > items.length - length) current = items.length - length;
+         } 
+         if (current >= items.length) {
+             current = 0;
+         }
+         items.each(slide);
+      })
+      .on("click", '[data-bs-slide="prev"]', function(ev) {
+         ev.preventDefault();
+         dynamic && update(); 
+         $(this).siblings().removeClass('d-none');
+         current--;
+         if (noloop && current <= 0) {
+             $(this).addClass('d-none');
+             current = 0;
+         }         
+         if (current < 0) {
+             current = items.length - 1;
+         }
+         items.each(slide);
+      })
+      //listen to updated event and update items
+      .on('updated', function(){ 
+          update();
+          current = (items.length >= length)? items.length - length : 0 //show the newly added image last
+          items.each(slide);
+          input = $(this).parent().find('input.get-image-callback');
+          //last image removed, show input or hide if not support multiple values
+          if ($(this).find('.carousel-inner').children().length > 0) { //has image item
+              if ( ! input.is('.multiple-values') ){
+                input.parent().addClass('d-none');
+              }
+          } else {  
+              input.parent().removeClass('d-none');
+          } 
+      })
+      //Showing handlers for removable carousel items when hovering
+      .on({ 
+          mouseover: function () {
+              var container = $(this).css({
+                  opacity: 1, 
+                  transition: "opacity .15s linear" 
+              });
+              var control = container//.find('img').addClass('')
+                  .find('.overlay');
+              var parent  = container.parent();
+              if (control.length ){
+                  control.removeClass('d-none');
+              } else {
+                  control = $('<div class="overlay btn-group" style="position:absolute; top:50%; left:50%; transform: translate(-50%, -50%);"><span class="removable-handler btn btn-dark" title="Remove"><i class="bi bi-trash"></i></span></div>');
+                  if (parent.closest('.carousel-multi') && parent.closest('.carousel-multi').is(".multiple-values") ){
+                      control.prepend('<i class="star-handler btn btn-dark bi bi-star" title="Mark Default"></i> ')
+                  }
+                  control.find(".star-handler").on('click', function() { 
+                      container.prependTo(parent)
+                             .siblings().find('.star-handler').removeClass('text-warning active');
+                      parent.closest('.variant')
+                             .find('[data-bs-toggle="collapse"]').attr('src', container.find('img').attr('src'));
+                      $(this).addClass('text-warning active');       
+                      parent.trigger('updated'); //let carousel know to update its items
+                  });
+                  control.find(".removable-handler").on('click', function() { 
+                      //var parent = $(this).parent().parent().parent();
+                      if ($(this).siblings('.star-handler').hasClass('active')) { //default image
+                          var img = (container.next().find('img').attr('src'))? container.next().find('img').attr('src') : 'https://via.placeholder.com/120x80/5a5c69/fff?text=Add%20Image';
+                          parent.closest('.variant')
+                             .find('[data-bs-toggle="collapse"]').attr('src', img);
+                      }
+                      container.remove();
+                      parent.trigger('updated'); //let carousel know to update its items
+                  });             
+                  control.prependTo(container);
+              }
+              //always check due to dynamic item update/remove
+              if (!container.prev().length) { //first col
+                  control.find(".star-handler").addClass('text-warning active');
+              }                   
+          },
+          mouseout: function () {
+              $(this).css('opacity', .8)
+                     //.find('img').removeClass('rounded-pill')
+                     .find('.overlay').addClass('d-none');
+          },
+      }, '.carousel-inner.item-removable .col'); //carousel item container      
+    }; 
+    $('.carousel-multi').each(Sitegui.carousel);        
+  }); 
   </script>
   <style type="text/css">
     .form-switch-radio .btn {
@@ -535,6 +677,9 @@
           {if $values && $values.$name2}
             {$field2.value = $values.$name2}
           {/if}
+          {if $field1.visibility == readonly}
+            {$field2.visibility = 'readonly'}
+          {/if}
           {if $field2.type == 'lookup' || $field2.listen}
             {$field2.lookup_key = $name2} {* before changing $name2 *}
             {include "lookup.tpl"}
@@ -545,9 +690,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" {if $values@first}disabled{/if}></button>
       </div>   
     {/foreach}
+    {if $field1.visibility != readonly}
       <div class="text-center mb-3">
         <button type="button" class="btn border-0"><i class="bi bi-plus-circle-fill text-info fs-3 new-fieldset {$name1}"></i></button>
       </div>
+    {/if}  
     </div>     
   {else}
     {buildForm key=$name1 field=$field1}

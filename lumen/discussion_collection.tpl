@@ -4,7 +4,7 @@
   <ul class="nav nav-pills" role="tablist">
       {if $html.menu_config.0 != readonly}
       <li class="nav-item" role="presentation">
-        <button class="btn btn-sm btn-outline-primary text-nowrap" type="button" data-url="https://my.{$site.url}/account/app/view{$links.edit}{$links.edit2}?sgframe=1" data-title="{'New :item'|trans:['item' => 'Thread']}" data-bs-toggle="modal" data-bs-target="#dynamicModal" aria-expanded="false">{'New :item'|trans:['item' => 'Thread']}</button> 
+        <button class="btn btn-sm btn-outline-primary text-nowrap" type="button" data-url="https://{$site.account_url}/account/app/view{$links.edit}{$links.edit2}?sgframe=1" data-title="{'New :item'|trans:['item' => 'Thread']}" data-bs-toggle="modal" data-bs-target="#dynamicModal" aria-expanded="false">{'New :item'|trans:['item' => 'Thread']}</button> 
       </li>
       {/if}                    
   </ul>

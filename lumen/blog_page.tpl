@@ -6,7 +6,7 @@
         <img class="img-fluid px-0" src="{$api.config.banner.0}" style="min-height: 100px; width:auto;" />
       </div>
       <div class="col pt-3">
-        <h5 class="">{$api.config.name}</h5>
+        <a href="/blog" class="text-decoration-none"><h5 class="">{$api.config.name}</h5></a>
       </div>
       <style type="text/css">
         #block_header .navbar {
@@ -38,8 +38,8 @@
 {/block}
 
 {block name="content_right"}
-  {if $api.collections_items}
   <div class="col-12 col-md-3 mb-3 pt-3">
+  {if $api.collections_items}
     <h6 class="ps-3 pb-2">{'Related Topics'|trans}</h6>
     <ul class="list-group">
     {foreach $api.collections_items AS $item}
@@ -51,7 +51,7 @@
       </a>
     {/foreach}  
     </ul>
-  </div>
   {/if} 
+  </div>
   {$content_right nofilter}  
 {/block} 

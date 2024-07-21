@@ -6,7 +6,7 @@
     <img class="img-fluid px-0" src="{$api.config.banner.0}" style="min-height: 100px; width:auto;" />
   </div>
   <div class="container-md pt-3">
-    <h5 class="">{$api.config.name}</h5>
+        <a href="/{$html.current_app|lower}" class="text-decoration-none"><h5 class="">{$api.config.name}</h5></a>
   </div>  
   {/if} 
   <div class="container-md mb-4">
@@ -50,7 +50,7 @@
       <a class="sg-img-container text-decoration-none mx-auto" href="{$row.slug}">
         <img class="img-fluid card-img-top" src='{$row.image}' alt="" />
       </a>
-      <div class="card-body px-4 caption">
+      <div class="card-body px-2 caption">
         <div class="row">
           <div class="col">
             <a class="fw-bold text-decoration-none pe-2" href="{$row.slug}">{$row.title|default:$row.name}</a> 

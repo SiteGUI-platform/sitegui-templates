@@ -1,10 +1,10 @@
 <!doctype html>
 <html>
 <head>
-    <title>{$data.subject}</title>
+    <title>Phiếu Thu</title>
 </head>    
 <body bgcolor="#f5f5f5">
-  <table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto; max-width: 620px;">
+  <table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto;">
     <tbody>
       <tr>
         <td align="left" valign="top" style="padding: 0;">
@@ -25,7 +25,7 @@
                     <tbody>
                       <tr>
                         <td align="center" valign="top" style="padding: 10px;">
-                          <a href="https://{$site.url}" style="text-decoration: none;"><img src="{$site.logo}" height="49" alt="" style="height: auto; max-width: 60%; border: 0; line-height: 100%; outline: 0; -ms-interpolation-mode: bicubic; color: #ffffff; font-size: 14px;"></a>
+                          <a href="https://{$site.url}" style="text-decoration: none;"><img src="{$site.logo}" height="49" alt="" style="height: auto; max-width: 100%; border: 0; line-height: 100%; outline: 0; -ms-interpolation-mode: bicubic; color: #ffffff; font-size: 14px;"></a>
                         </td>
                       </tr>
                     </tbody>
@@ -50,60 +50,132 @@
               <tr>
                 <td style="padding: 20px; background: #ffffff; border-radius: 8px" bgcolor="#ffffff" valign="top">
                   <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                    {if $data.title}
                     <tbody>
                       <tr>
-                        <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 26px; font-weight: 800; line-height: 46px; letter-spacing: -0.6px; color: #151515; padding: 0" valign="top">
-                          {$data.title}
+                        <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 600; line-height: 46px; letter-spacing: -0.6px; color: #151515; padding: 0" valign="top">
+                          Phiếu Thu #{$data.series}. Ngày Thanh Toán: {$data.paid_date|date_format}
                         </td>
                       </tr>
                       <tr>
                         <td height="15" style="line-height: 1px; font-size: 1px">&nbsp;</td>
                       </tr>
                     </tbody>
-                    {/if}
                     <tbody>
                       <tr>
-                        <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 17px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top">
-                          Hello {$data.recipient},<br><br>
-                          {if $data.body}{$data.body}{elseif $data.content eq (array) $data.content}{$data.content.en}{else}{$data.content}{/if}
+                        <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top">
+                          Xin chào {$data.recipient},<br>
+                          Đây là phiếu thu cho thanh toán gần đây.
                         </td>
                       </tr>
                       <tr>
                         <td height="25" style="line-height: 1px; font-size: 1px;">&nbsp;</td>
                       </tr>
                     </tbody>
-                    {if $data.cta_text}
                     <tbody>
-                      <tr>
-                        <td style="padding: 5px 10px;" valign="top" align="center">
-                          <table border="0" cellpadding="0" cellspacing="0" role="presentation">
-                            <tbody>
-                              <tr>
-                                <td style="text-align: center; border-radius: 8px; padding: 14px 19px; background-color: #0f35b2" bgcolor="#0f35b2" valign="top" align="center">
-                                  <a href="{$data.cta_url}" style="text-decoration: none; line-height: 24px; letter-spacing: -0.2px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; color: #ffffff; word-break: break-word; display: block;">{$data.cta_text}</a>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </td>  
-                      </tr>
                       <tr>  
                         <td>
-                          <table border="0" cellpadding="0" cellspacing="0" role="presentation">
+                          <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
                             <tbody>                              
                               <tr>
-                                <td style="display: none; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 17px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top" align="center">
-                               or copy and paste the following link into your web browser:<br>
-                               <textarea style="background-color: beige; word-break:break-all;">{$data.cta_url}</textarea>
+		                            <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 17px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top">
+    															<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+    		                            <tbody>
+    		                              <tr>
+    		                                <th style="letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; padding: 10px 10px 10px 0; border-bottom: 1px solid #E5E5E5; width: 90%; color: #151515;" align="left">
+    		                                  Mục
+    		                                </th>
+    		                                <th style="letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; border-bottom: 1px solid #E5E5E5; padding: 10px 0; width: 60px; color: #151515;" align="right">
+    		                                  Số Tiền
+    		                                </th>
+    		                              </tr>
+    		                              <tr>
+    		                                <td colspan="4" height="0" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
+    		                              </tr>
+    		                            </tbody>
+    		                            <tbody>
+    		                              {foreach $data.lines AS $line}		
+    		                              <tr>
+    		                                <td style="padding: 20px 20px 20px 0; font-size: 16px; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; border-bottom: 1px solid #E5E5E5;" valign="top">
+    		                                  {$line.name} {if $line.to}({$line.from|date_format} - {$line.to|date_format}){/if}
+                                        </td>
+    		                                <td style="padding: 20px 0 20px; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; border-bottom: 1px solid #E5E5E5; color: #151515;" valign="top" align="right">
+    		                                  {$data.currency.prefix}{$line.amount}{$data.currency.suffix}
+    		                                </td>
+    		                              </tr>
+    		                              {/foreach} 
+                                      <tr>
+    		                                <td style="padding: 20px 20px 10px 0; font-size: 16px; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif;" valign="top" align="right">
+    		                                  Tạm tính
+    		                                </td>
+    		                                <td style="padding: 20px 0px 10px 0; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; color: #151515;" valign="top" align="right">
+    		                                  {$data.currency.prefix}{$data.subtotal}{$data.currency.suffix}
+    		                                </td>
+    		                              </tr>
+    		                              {foreach $data.taxes AS $tax}
+    		                              <tr>
+    		                                <td style="padding: 10px 20px 10px 0; color: #9B9B9B; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px;" valign="top" align="right">
+    		                                  {if $tax.name}{$tax.name}{else}Thuế <span class="js-percentage short">{$tax.rate}%</span>{/if} 
+    		                                </td>
+    		                                <td style="padding: 10px 0; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; color: #151515;" valign="top" align="right">
+    		                                  {$data.currency.prefix}{$tax.amount -0}{$data.currency.suffix}
+    		                                </td>
+    		                              </tr>
+    		                              {/foreach}
+    		                              <tr>
+    		                                <td style="padding: 10px 20px 10px 0; color: #9B9B9B; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px;" valign="top" align="right">
+    		                                  Total
+    		                                </td>
+    		                                <td style="padding: 10px 0; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; color: #151515;" valign="top" align="right">
+    		                                  {$data.currency.prefix}{$data.total -0}{$data.currency.suffix}
+    		                                </td>
+    		                              </tr>
+                                      <tr>
+                                        <td style="padding: 10px 20px 10px 0; color: #9B9B9B; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px;" valign="top" align="right">
+                                          Đã thanh toán - {$data.payment_method} ({if $data.credit}{"Credit"|trans} {/if}{$data.transactions.0.payment_id})
+                                        </td>
+                                        <td style="padding: 10px 0; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; color: #151515;" valign="top" align="right">
+                                          {$data.currency.prefix}{$data.total - $data.amount_due}{$data.currency.suffix}
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td style="padding: 10px 20px 10px 0; color: #9B9B9B; letter-spacing: -0.2px; line-height: 26px; font-weight:600; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px;" valign="top" align="right">
+                                          Phải trả
+                                        </td>
+                                        <td style="padding: 10px 0; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; color: #151515;" valign="top" align="right">
+                                          {$data.currency.prefix}{$data.amount_due -0}{$data.currency.suffix}
+                                        </td>
+                                      </tr>
+    		                            </tbody>
+    		                          </table>                               
+
                                 </td>
                               </tr>
                             </tbody>
                           </table>
                         </td>
                       </tr>
+                      <tr>
+                        <td>
+                          <table border="0" cellpadding="0" cellspacing="0" role="presentation">
+                            <tbody>
+                              <tr>
+                                <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top">
+                                </td>
+                              </tr>
+                              <tr>
+                                <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top">
+                                  Nếu quý khách có bất kỳ câu hỏi nào vể khoản thanh toán này, vui lòng liên hệ với chúng tôi thông qua <a href="{$data.account_center}/invoice" style="text-decoration: none;">Trung tâm Tài khoản</a>.
+                                </td>
+                              </tr>
+                              <tr>
+                                <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top">
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>  
+                      </tr>
                     </tbody>
-                    {/if}
                     {if $data.signature}
                     <tbody>
                       <tr>
@@ -150,7 +222,7 @@
                                       <tbody>
                                         <tr>
                                           <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; line-height: 18px; letter-spacing: -0.2px; color: #000000" valign="top">
-                                            Follow Us
+                                            Theo dõi
                                           </td>
                                         </tr>
                                         <tr>
@@ -204,7 +276,7 @@
                                         <tr>
                                           <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 24px;" valign="top" align="">
                                             <img src="https://cdn.sitegui.com/public/uploads/global/img/house-lock.png" alt="" style="border: 0; line-height: 100%; outline: 0; vertical-align:text-bottom;"><span>&nbsp;&nbsp;</span>
-                                            <a href="https://{$site.account_url}/account" style="text-decoration: none; color: #1595E7;">Account Center</a>
+                                            <a href="https://{$site.account_url}/account" style="text-decoration: none; color: #1595E7;">Trang Tài Khoản</a>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -233,7 +305,8 @@
                                 </tr>
                               </tbody>
                             </table>
-                          </div>                       
+                          </div>
+                          <!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->                        
                         </td>
                       </tr>
                     </tbody>
@@ -243,7 +316,8 @@
             </tbody>
           </table>
           <!-- END MODULE: Footer 1 -->
-          {/block}  
+          {/block} 
+ 
           <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
             <tbody>
               <tr>

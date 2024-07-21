@@ -1,10 +1,10 @@
 <!doctype html>
 <html>
 <head>
-    <title>{$data.subject}</title>
+    <title>Xác Nhận Đơn Hàng</title>
 </head>    
 <body bgcolor="#f5f5f5">
-  <table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto; max-width: 620px;">
+  <table width="96%" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="margin: 0 auto;">
     <tbody>
       <tr>
         <td align="left" valign="top" style="padding: 0;">
@@ -25,7 +25,7 @@
                     <tbody>
                       <tr>
                         <td align="center" valign="top" style="padding: 10px;">
-                          <a href="https://{$site.url}" style="text-decoration: none;"><img src="{$site.logo}" height="49" alt="" style="height: auto; max-width: 60%; border: 0; line-height: 100%; outline: 0; -ms-interpolation-mode: bicubic; color: #ffffff; font-size: 14px;"></a>
+                          <a href="https://{$site.url}" style="text-decoration: none;"><img src="{$site.logo}" height="49" alt="" style="height: auto; max-width: 100%; border: 0; line-height: 100%; outline: 0; -ms-interpolation-mode: bicubic; color: #ffffff; font-size: 14px;"></a>
                         </td>
                       </tr>
                     </tbody>
@@ -50,30 +50,35 @@
               <tr>
                 <td style="padding: 20px; background: #ffffff; border-radius: 8px" bgcolor="#ffffff" valign="top">
                   <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
-                    {if $data.title}
                     <tbody>
                       <tr>
-                        <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 26px; font-weight: 800; line-height: 46px; letter-spacing: -0.6px; color: #151515; padding: 0" valign="top">
-                          {$data.title}
+                        <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 800; line-height: 46px; letter-spacing: -0.6px; color: #151515; padding: 0" valign="top">
+                        	Đơn hàng #{$data.id}. Tình trạng: {$data.status|trans}
                         </td>
                       </tr>
                       <tr>
                         <td height="15" style="line-height: 1px; font-size: 1px">&nbsp;</td>
                       </tr>
                     </tbody>
-                    {/if}
                     <tbody>
                       <tr>
                         <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 17px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top">
-                          Hello {$data.recipient},<br><br>
-                          {if $data.body}{$data.body}{elseif $data.content eq (array) $data.content}{$data.content.en}{else}{$data.content}{/if}
+                          Xin chào {$data.meta.cart.user.name},<br><br>
+                          Cảm ơn quý khách đã mua hàng. Đơn hàng đã được tiếp nhận và chuyển đến bộ phận xử lý đơn hàng. Quý khách sẽ nhận được thông tin về đơn hàng trong email tiếp theo.
                         </td>
                       </tr>
+                      {if $data.meta.cart.shipping_methods.0.address_to}
+                      <tr>
+                        <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 17px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top">
+                          <br><b>Người nhận:</b> {$data.meta.cart.shipping_methods.0.address_to.name} {if $data.meta.cart.shipping_methods.0.address_to.phone}({$data.meta.cart.shipping_methods.0.address_to.phone}){/if}<br>
+                          {$data.meta.cart.shipping_methods.0.address_to.street}{if $data.meta.cart.shipping_methods.0.address_to.street2}, {$data.meta.cart.shipping_methods.0.address_to.street2}{/if}, {$data.meta.cart.shipping_methods.0.address_to.city}, {$data.meta.cart.shipping_methods.0.address_to.state}{if $data.meta.cart.shipping_methods.0.address_to.zip} {$data.meta.cart.shipping_methods.0.address_to.zip}{/if}, {$data.meta.cart.shipping_methods.0.address_to.country}
+                        </td>
+                      </tr>
+                      {/if}
                       <tr>
                         <td height="25" style="line-height: 1px; font-size: 1px;">&nbsp;</td>
                       </tr>
                     </tbody>
-                    {if $data.cta_text}
                     <tbody>
                       <tr>
                         <td style="padding: 5px 10px;" valign="top" align="center">
@@ -81,7 +86,7 @@
                             <tbody>
                               <tr>
                                 <td style="text-align: center; border-radius: 8px; padding: 14px 19px; background-color: #0f35b2" bgcolor="#0f35b2" valign="top" align="center">
-                                  <a href="{$data.cta_url}" style="text-decoration: none; line-height: 24px; letter-spacing: -0.2px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; color: #ffffff; word-break: break-word; display: block;">{$data.cta_text}</a>
+                                  <a href="https://{$site.account_url}/account/order/view/{$data.id}" style="text-decoration: none; line-height: 24px; letter-spacing: -0.2px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; color: #ffffff; word-break: break-word; display: block;">Xem Đơn Hàng</a>
                                 </td>
                               </tr>
                             </tbody>
@@ -90,12 +95,101 @@
                       </tr>
                       <tr>  
                         <td>
-                          <table border="0" cellpadding="0" cellspacing="0" role="presentation">
+                          <table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
                             <tbody>                              
                               <tr>
-                                <td style="display: none; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 17px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top" align="center">
-                               or copy and paste the following link into your web browser:<br>
-                               <textarea style="background-color: beige; word-break:break-all;">{$data.cta_url}</textarea>
+		                        <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 17px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top">
+									<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+		                            <tbody>
+		                              <tr>
+		                                <th style="letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; padding: 10px 10px 10px 0; border-bottom: 1px solid #E5E5E5; width: 400px; color: #151515;" align="left">
+		                                  Mặt Hàng
+		                                </th>
+		                                <th style="letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; padding: 10px 20px 10px 0; border-bottom: 1px solid #E5E5E5; width: 100px; color: #151515;" align="right">
+		                                  SL
+		                                </th>
+		                                <th style="letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; border-bottom: 1px solid #E5E5E5; padding: 10px 0; width: 60px; color: #151515;" align="right">
+		                                  Giá tiền
+		                                </th>
+		                              </tr>
+		                              <tr>
+		                                <td colspan="3" height="0" style="font-size: 1px; line-height: 1px;">&nbsp;</td>
+		                              </tr>
+		                            </tbody>
+		                            <tbody>
+		                              {foreach $data.meta.cart.items AS $item}		
+		                              <tr>
+		                                <td style="padding: 20px 20px 20px 0; font-size: 16px; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; border-bottom: 1px solid #E5E5E5;" valign="top">
+		                                  <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+											<tbody>
+	                                            <tr>
+	                                              <td style="padding: 0 0 0;" width="58" valign="top">
+	                                                <img src="{$item.images.0}" width="48" alt="" style="border: 0; outline: 0; line-height: 100%; -ms-interpolation-mode: bicubic; display: block;">
+	                                              </td>
+	                                              <td style="padding: 9px 0 0;" valign="top">
+	            									{$item.product.name} <i>{$item.product_fields.domain.value}</i> 
+	                                              </td>
+	                                            </tr>
+	                                          </tbody>
+		                                  </table>
+		                                </td>
+		                                <td style="padding: 29px 20px 20px 0; color: #9B9B9B; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; border-bottom: 1px solid #E5E5E5;" valign="top" align="right">
+		                                  {$item.qty}
+		                                </td>
+		                                <td style="padding: 29px 0 20px; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; border-bottom: 1px solid #E5E5E5; color: #151515;" valign="top" align="right">
+		                                  {$data.meta.cart.currency.prefix}{$item.amount}{$data.meta.cart.currency.suffix}
+		                                </td>
+		                              </tr>
+		                              {/foreach}
+		                              <tr>
+		                                <td colspan="2" style="padding: 20px 20px 10px 0; color: #9B9B9B; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px;" valign="top" align="right">
+		                                  Tạm tính
+		                                </td>
+		                                <td style="padding: 20px 0px 10px 0; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; color: #151515;" valign="top" align="right">
+		                                  {$data.meta.cart.currency.prefix}{$data.meta.cart.subtotal}{$data.meta.cart.currency.suffix}
+		                                </td>
+		                              </tr>
+		                              {if $data.meta.cart.coupon.amount}
+		                              <tr>
+		                                <td colspan="2" style="padding: 10px 20px 10px 0; color: #9B9B9B; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px;" valign="top" align="right">
+		                                  Giảm giá ({$data.meta.cart.coupon.code})
+		                                </td>
+		                                <td style="padding: 10px 0; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; color: #151515;" valign="top" align="right">
+		                                  -{$data.meta.cart.currency.prefix}{$data.meta.cart.coupon.amount}{$data.meta.cart.currency.suffix}
+		                                </td>
+		                              </tr>
+		                              {/if}
+		                              {if $data.meta.cart.shipping}
+		                              <tr>
+		                                <td colspan="2" style="padding: 10px 20px 10px 0; color: #9B9B9B; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px;" valign="top" align="right">
+		                                  Phí vận chuyển ({$data.meta.cart.shipping_methods.0.name})
+		                                </td>
+		                                <td style="padding: 10px 0; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; color: #151515;" valign="top" align="right">
+		                            		{$data.meta.cart.currency.prefix}{$data.meta.cart.shipping}{$data.meta.cart.currency.suffix}
+		                                </td>
+		                              </tr>
+		                              {/if}
+		                              {if $data.meta.cart.tax.amount}
+		                              <tr>
+		                                <td colspan="2" style="padding: 10px 20px 10px 0; color: #9B9B9B; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px;" valign="top" align="right">
+		                                  Thuế ({$data.meta.cart.tax.name})
+		                                </td>
+		                                <td style="padding: 10px 0; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; color: #151515;" valign="top" align="right">
+		                                  {$data.meta.cart.currency.prefix}{$data.meta.cart.tax.amount}{$data.meta.cart.currency.suffix}
+		                                </td>
+		                              </tr>
+		                              {/if}
+		                              <tr>
+		                                <td colspan="2" style="padding: 10px 20px 10px 0; color: #9B9B9B; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px;" valign="top" align="right">
+		                                  Tổng
+		                                </td>
+		                                <td style="padding: 10px 0; letter-spacing: -0.2px; line-height: 26px; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; color: #151515;" valign="top" align="right">
+		                                  {$data.meta.cart.currency.prefix}{$data.amount}{$data.meta.cart.currency.suffix}
+		                                </td>
+		                              </tr>
+		                            </tbody>
+		                          </table>                               
+
                                 </td>
                               </tr>
                             </tbody>
@@ -103,7 +197,6 @@
                         </td>
                       </tr>
                     </tbody>
-                    {/if}
                     {if $data.signature}
                     <tbody>
                       <tr>
@@ -150,7 +243,7 @@
                                       <tbody>
                                         <tr>
                                           <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; line-height: 18px; letter-spacing: -0.2px; color: #000000" valign="top">
-                                            Follow Us
+                                          Theo dõi
                                           </td>
                                         </tr>
                                         <tr>
@@ -204,7 +297,7 @@
                                         <tr>
                                           <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 24px;" valign="top" align="">
                                             <img src="https://cdn.sitegui.com/public/uploads/global/img/house-lock.png" alt="" style="border: 0; line-height: 100%; outline: 0; vertical-align:text-bottom;"><span>&nbsp;&nbsp;</span>
-                                            <a href="https://{$site.account_url}/account" style="text-decoration: none; color: #1595E7;">Account Center</a>
+                                            <a href="https://{$site.account_url}/account" style="text-decoration: none; color: #1595E7;">Trang Tài Khoản</a>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -233,7 +326,8 @@
                                 </tr>
                               </tbody>
                             </table>
-                          </div>                       
+                          </div>
+                          <!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->                        
                         </td>
                       </tr>
                     </tbody>
@@ -243,7 +337,7 @@
             </tbody>
           </table>
           <!-- END MODULE: Footer 1 -->
-          {/block}  
+          {/block}   
           <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
             <tbody>
               <tr>

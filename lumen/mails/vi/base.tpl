@@ -65,8 +65,8 @@
                     <tbody>
                       <tr>
                         <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 17px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top">
-                          Hello {$data.recipient},<br><br>
-                          {if $data.body}{$data.body}{elseif $data.content eq (array) $data.content}{$data.content.en}{else}{$data.content}{/if}
+                          Xin chào {$data.recipient},<br><br>
+                          {if $data.body}{$data.body}{elseif $data.content eq (array) $data.content}{$data.content.vi}{else}{$data.content}{/if}
                         </td>
                       </tr>
                       <tr>
@@ -95,7 +95,7 @@
                               <tr>
                                 <td style="display: none; font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 17px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top" align="center">
                                or copy and paste the following link into your web browser:<br>
-                               <textarea style="background-color: beige; word-break:break-all;">{$data.cta_url}</textarea>
+                               <span style="background-color: beige; word-break:break-all;">{$data.cta_url}</span>
                                 </td>
                               </tr>
                             </tbody>
@@ -150,7 +150,7 @@
                                       <tbody>
                                         <tr>
                                           <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 500; line-height: 18px; letter-spacing: -0.2px; color: #000000" valign="top">
-                                            Follow Us
+                                          Theo dõi
                                           </td>
                                         </tr>
                                         <tr>
@@ -204,7 +204,7 @@
                                         <tr>
                                           <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 24px;" valign="top" align="">
                                             <img src="https://cdn.sitegui.com/public/uploads/global/img/house-lock.png" alt="" style="border: 0; line-height: 100%; outline: 0; vertical-align:text-bottom;"><span>&nbsp;&nbsp;</span>
-                                            <a href="https://{$site.account_url}/account" style="text-decoration: none; color: #1595E7;">Account Center</a>
+                                            <a href="https://{$site.account_url}/account" style="text-decoration: none; color: #1595E7;">Trang Tài Khoản</a>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -233,7 +233,8 @@
                                 </tr>
                               </tbody>
                             </table>
-                          </div>                       
+                          </div>
+                          <!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->                        
                         </td>
                       </tr>
                     </tbody>
