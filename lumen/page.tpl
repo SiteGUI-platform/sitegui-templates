@@ -25,15 +25,15 @@
                     {if $api.parent}
                         <div class="row">
                           <div class="col-12">
-                            <span class="me-2">{'For'|trans} <b>{if $api.parent.type eq App}{$api.parent.subtype|replace:'_':' '|trans}{else}{$api.parent.type|replace:'_':' '|trans}{/if}</b></span>
-                            <a href="#" data-url="{$api.parent.slug}?sgframe=1" data-title="{$api.parent.subtype|replace:'_':' '|trans}: {$api.parent.name}" data-bs-toggle="modal" data-bs-target="#dynamicModal" class="text-decoration-none">{$api.parent.name}</a>
+                            <span class="me-2">{'For'|trans} <b>{$api.parent.app_label}</b></span>
+                            <a href="#" data-url="{$api.parent.slug}?sgframe=1" data-title="{$api.parent.app_label}: {$api.parent.name}" data-bs-toggle="modal" data-bs-target="#dynamicModal" class="text-decoration-none">{$api.parent.name}</a>
                           </div>  
                         </div> 
                         {if $api.parent.id ne $api.parent.root_id}
                         <div class="row">
                           <div class="col-12">
-                            <span class="me-2">{'In'|trans} <b>{if $api.parent.root_type eq App}{$api.parent.root_subtype|replace:'_':' '|trans}{else}{$api.parent.root_type|replace:'_':' '|trans}{/if}</b></span>
-                            <a href="#" data-url="{$api.parent.root_slug}?sgframe=1" data-title="{$api.parent.root_subtype|replace:'_':' '|trans}: {$api.parent.root_name}" data-bs-toggle="modal" data-bs-target="#dynamicModal" class="text-decoration-none">{$api.parent.root_name}</a>
+                            <span class="me-2">{'In'|trans} <b>{$api.parent.root_app_label}</b></span>
+                            <a href="#" data-url="{$api.parent.root_slug}?sgframe=1" data-title="{$api.parent.root_app_label}: {$api.parent.root_name}" data-bs-toggle="modal" data-bs-target="#dynamicModal" class="text-decoration-none">{$api.parent.root_name}</a>
                           </div>  
                         </div> 
                         {/if}

@@ -62,6 +62,9 @@
     right: unset;
     left: 50%;
   }  
+  .list-view .card-body {
+    padding-top: 0;
+  }
   .thumbnail:hover .hover-visible {
     visibility: visible;
     transition-delay: .3s;
@@ -83,6 +86,11 @@
   .thumbnail .btn-secondary {
     opacity: 1;    
   }
+  @media (max-width: 575px){  
+    .js-sg-collection-item {
+        border-bottom: solid 1px #EEE;
+    }
+  }    
 </style>
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(e){

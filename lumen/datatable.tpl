@@ -570,10 +570,10 @@
 				    			<h5 class="{if !$forapp}mt-sm-2{/if} text-success sg-app-header">\
 				    				{if !$forapp}\
 				    					{if $links.edit}\
-					    					<a href="https://{$site.account_url}/account/app/view{$links.edit}{$links.edit2}" data-url="https://{$site.account_url}/account/app/view{$links.edit}{$links.edit2}?sgframe=1" data-title="{"New :item"|trans:["item" => $html.current_app|replace: '_':' ']}" class="sg-app-create {if $html.app_readonly}d-none{/if}" data-bs-toggle="modal" data-bs-target="#dynamicModal">\
+					    					<a href="https://{$site.account_url}/account/app/view{$links.edit}{$links.edit2}" data-url="https://{$site.account_url}/account/app/view{$links.edit}{$links.edit2}?sgframe=1" data-title="{"New :item"|trans:["item" => $html.app_label]}" class="sg-app-create {if $html.app_readonly}d-none{/if}" data-bs-toggle="modal" data-bs-target="#dynamicModal">\
 					    						<i class="bi bi-plus-circle-dotted fs-4 ps-sm-2 pe-3"></i></a>\
 				    					{/if}\
-				    					<span class="sg-app-name">{$html.current_app_label|replace: '_':' '}</span>\
+				    					<span class="sg-app-name">{$html.app_label_plural}</span>\
 				    					<small class="text-muted">\
 				    						{foreach $html.app_menu as $level1}\
 				    							{if $level1.slug}<a href="{$level1.slug}">{/if}{if $level1.icon}<i class="{$level1.icon}"></i>{/if}\
@@ -651,14 +651,14 @@
 					  self.initBootgrid(container, $state.url + ".json?html=1") 
 						$(container).on("loaded.rs.jquery.bootgrid", function (e) {
 						  //update App name at several places
-						  let $label = ajaxResponse.html? ajaxResponse.html.current_app_label.replace('_', ' ') : ev.target.innerText
+						  let $label = ajaxResponse.html? ajaxResponse.html.app_label_plural : ev.target.innerText
 							$('.sg-app-listing').parent().find('.dropdown-item.active').removeClass('active rounded')
 							$('.sg-app-listing').closest('.nav-item').find('.nav-link span').text($label)
 							$('.sg-app-create')
 								.attr('data-url', (ajaxResponse.html && ajaxResponse.links)? ajaxResponse.links.edit +'?sgframe=1' : '#')
 								.attr('href', '#')
 								.attr('data-title', Sitegui.trans("New :item", {
-									"item": ajaxResponse.html.current_app.replace('_', ' ')
+									"item": ajaxResponse.html.app_label
 								} ) )
 							$('.sg-app-name').text($label)
 							$(ev.target).addClass('active rounded')

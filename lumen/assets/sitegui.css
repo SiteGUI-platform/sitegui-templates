@@ -193,7 +193,7 @@ h5, a:hover, .menu-dropdown a.level3:hover, .menu-sidebar a:hover > span, .menu-
     display: none;
 }
 #block_main {
-    min-height: 55vh;
+    min-height: 60vh;
 }
 #block_header .navbar {
   background-color: transparent !important;
@@ -321,9 +321,9 @@ span[class*="status__"] {
 }
 .status__shipped,
 .status__in_transit,
-.status__closed,
 .status__done,
 .status__completed,
+.status__processed,
 .status__released {
     background-color: gold;
     color: #000;
@@ -341,19 +341,24 @@ span[class*="status__"] {
     color: #000;
 }
 .status__returned,
+.status__withdrawn,
+.status__closed,
 .status__void {
     background-color: lightsteelblue;
     color: #000;
 }
+.status__not_started,
 .status__returning {
     background-color: thistle;
     color: #000;
 }
-.status__tba {
+.status__blocked,
+.status__deleted {
     background-color: mistyrose;
     color: #000;
 }
 .status__disputed,
+.status__overdue,
 .status__re-opened {
     background-color: lightcoral;
     color: #000;

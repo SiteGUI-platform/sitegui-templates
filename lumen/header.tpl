@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content="{$api.page.description}" />
   <meta name="generator" content="SiteGUI.CMS" />
-  <title>{$api.page.title|default: $api.page.name} - {$site.name} {$html.current_app_label}</title>
+  <title>{$api.page.title|default: $api.page.name} - {$site.name} {$html.app_label_plural}</title>
 
   <!-- Custom styles for this template - including bootstrap-->
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.3/lumen/bootstrap.min.css"/>
@@ -15,7 +15,7 @@
   <!-- Custom fonts for this template-->
 	<script src="{$site.cdn}/{$template}/assets/sitegui.js?v=15" id="sitegui-js" data-locale="{$site.locale|default:$user.language|default:$site.language}" data-currency="{$site.currency.code|default:USD}" data-precision="{$site.currency.precision|default:2}" data-timezone="{$user.timezone|default:$site.timezone|default:UTC}"></script>
 	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600" rel="stylesheet" />	
- 	<link href="{$site.cdn}/{$template}/assets/sitegui.css?v=34" rel="stylesheet" />
+ 	<link href="{$site.cdn}/{$template}/assets/sitegui.css?v=38" rel="stylesheet" />
 	<link rel="shortcut icon" href="{$site.cdn}/{$template}/assets/favicon.png" /> 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />

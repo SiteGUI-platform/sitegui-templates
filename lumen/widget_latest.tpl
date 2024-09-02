@@ -195,7 +195,7 @@
 			<div class="carousel-inner overflow-visible for-ribbon">
 				<div class="row g-2 mt-1">
 				{foreach $api["widget_latest_{$latest_widget_order}"] as $row}
-					<div class='col js-sg-collection-item position-relative {if $row@index >= $api[$_wlso]["columns"]}d-none{/if}'>
+					<div class='col js-sg-collection-item border-bottom-0 position-relative {if $row@index >= $api[$_wlso]["columns"]}d-none{/if}'>
 					    <div class='thumbnail card h-100 {$api[$_wlso]["item_classes"]}'>
 					      {if $row.was > 0 AND $row.was > $row.price}
 						      <span class="sg-discount position-absolute top-0 my-2 z-3 badge rounded-0 rounded-end bg-danger">-{(100*(1-$row.price/$row.was))|truncate:2:''}%</span>

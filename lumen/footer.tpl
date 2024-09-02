@@ -2,17 +2,16 @@
 <div id="footer" class="row pb-0">
 	<div class="mb-4">
 		<div class="container-md">
-			<div class="row">
-				<div class="col-md"></div>
+			<div class="row justify-content-md-end">
 				{foreach from=$html.footer_menu item=level1}
 				<div class="col-md-{math equation='x/y' x=9 y=$html.footer_menu|count format='%d'} d-none d-md-block p-3">
 				 	<div class="">
-				    	<a class='title' href="{$level1.slug}">{$level1.name}{if $level1.id eq $page_id}{/if}{if $level1.active}{/if}</a>
-				    	<ul class="footer-list">
-							{foreach from=$level1.children item=level2}
-				          	<li class="footer-link"><a href="{$level2.slug}">{$level2.name}{if $level2.id eq $page_id}{/if}</a></li>
-				       		{/foreach}
-				    	</ul>
+			    	<a class='title' href="{$level1.slug}">{$level1.name}{if $level1.id eq $page_id}{/if}{if $level1.active}{/if}</a>
+			    	<ul class="footer-list">
+						{foreach from=$level1.children item=level2}
+			        <li class="footer-link"><a href="{$level2.slug}">{$level2.name}{if $level2.id eq $page_id}{/if}</a></li>
+			     	{/foreach}
+			    	</ul>
 				 	</div>
 				</div>
 				{/foreach}

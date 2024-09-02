@@ -18,7 +18,7 @@
           <div class="col">
             <a class="fw-bold text-decoration-none pe-2" href="{$row.slug}">{$row.title|default:$row.name}</a> 
           </div>
-          <div class="col text-end js-sg-date">
+          <div class="col-auto text-end js-sg-date">
             {$row.updated}
           </div>
         </div> 

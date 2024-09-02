@@ -4,7 +4,7 @@
   {block name='block_head'}{$block_head nofilter}{/block}
 </head>
 {block name='block_body'}
-<body class="sg-{if $api.page.subtype}{$api.page.subtype|replace:'App::':''|lower}__{/if}{$api.page.type|lower} pt-3">
+<body class="sg-{if $api.page.subtype}{$api.page.subtype|replace:'App::':''|lower}__{/if}{$api.page.type|lower}">
  <div class='container-fluid'>
    <div class='row'>
      <div class='col-12 px-0'>

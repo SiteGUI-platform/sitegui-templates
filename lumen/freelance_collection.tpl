@@ -13,7 +13,7 @@
     </ol>
   </nav>  
   {else}
-    <h4 class="mt-1">{$api.page.name|trans}</h5>
+    <h5 class="mt-1">{$api.page.name|trans}</h5>
   {/if}
   {if $html.searchPhrase}
     <div class="py-3">
@@ -46,13 +46,13 @@
 {/block}
 
 {block name="grid_item"}
-  <div class="col js-sg-collection-item border-bottom-0" data-filter="{$row.subtype|lower}">
+  <div class="col js-sg-collection-item" data-filter="{$row.subtype|lower}">
     <div class="thumbnail card rounded-bottom-0 h-100">
       {if $row.was > 0 AND $row.was > $row.price}
         <span class="sg-discount position-absolute top-0 my-2 z-3 badge rounded-0 rounded-end bg-danger">-{(100*(1-$row.price/$row.was))|truncate:2:''}%</span>
       {/if} 
       <a class="sg-img-container border text-decoration-none mx-auto position-relative overflow-hidden" href="{$row.slug}">
-        <img class="img-fluid card-img-top {if !$row.image AND !$row.variants.0.images.0}no-image{/if}" src='{$row.image|default:{$row.variants.0.images.0}|default:"https://ui-avatars.com/api/?size=80&rounded=1&length=4&font-size=.3&bold=1&background=random&b8ea86&color=417505&name={$row.name}"}' alt="" />{*hide on hover*}
+        <img class="img-fluid card-img-top {if !$row.image AND !$row.variants.0.images.0}no-image{/if}" src='{$row.image|default:"{$row.variants.0.images.0}"|default:"https://ui-avatars.com/api/?size=80&rounded=1&length=4&font-size=.3&bold=1&background=random&b8ea86&color=417505&name={$row.name}"}' alt="" />{*hide on hover*}
         {if $row.variants.0.images.0}
         <img class="img-fluid card-img-top position-absolute top-0 start-0 z-1" src="{$row.variants.0.images.0}" alt="" />
         {/if}
@@ -70,7 +70,7 @@
         {/foreach} 
       {/if}              	
       </div>
-      <div class="card-footer px-2 bg-white border-top-0">
+      <div class="card-footer bg-white border-top-0">
         <div class="row">
           <div class="col">
             <a class="fw-bold text-decoration-none pe-2" href="{$row.slug}">{$row.name}</a> 
@@ -78,13 +78,10 @@
               {if $row.was > $row.price}(<span class="js-sg-currency text-decoration-line-through">{$row.was}</span>){/if}
             {else} {'Free'|trans}{/if}
           </div>
-          <div class="col-auto text-end">
-            <span class="card-text small">{$row.subtype|trans}</span>
-          </div>
         </div> 
-        <div class="row d-none sg-description">
+        <div class="row sg-description mt-2">
           <div class="col">
-            {$row.description}
+            <a class="text-decoration-none text-secondary" href="{$links.datatable.creator}/{$row.creator_handle}">{if $row.creator_avatar}<span><img class="rounded-circle me-2 sg-datatable-thumb" loading="lazy" src="{$row.creator_avatar}" /></span>{/if}{$row.creator_name}</a>
           </div>
         </div> 
         <div class="row">

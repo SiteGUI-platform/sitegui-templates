@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <meta name="description" content="{$api.page.description}" />
   <meta name="generator" content="SiteGUI.CMS" />
-  <title>{$api.page.title|default: $api.page.name} - {$site.name} {$html.current_app_label}</title>
+  <title>{$api.page.title|default: $api.page.name} - {$site.name} {$html.app_label_plural}</title>
 	<!-- Custom styles for this template - including bootstrap-->
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.3/lumen/bootstrap.min.css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js" integrity="sha512-7Pi/otdlbbCR+LnW+F7PwFcSDJOuUJB3OxtEHbg4vSMvzvJjde4Po1v4BR9Gdc9aXNUNFVUY+SK51wWT8WF0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <!-- Custom fonts for this template-->
 	<script src="{$site.cdn}/{$template}/assets/sitegui.js?v=12" id="sitegui-js" data-locale="{$site.locale|default:$user.language|default:$site.language}" data-currency="{$site.currency.code|default:USD}" data-precision="{$site.currency.precision|default:2}" data-timezone="{$user.timezone|default:$site.timezone|default:UTC}"></script>
 	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600" rel="stylesheet" />	
- 	<link href="{$site.cdn}/{$template}/assets/sitegui.css?v=31" rel="stylesheet" />
+ 	<link href="{$site.cdn}/{$template}/assets/sitegui.css?v=33" rel="stylesheet" />
 	<link rel="shortcut icon" href="{$site.cdn}/{$template}/assets/favicon.png" /> 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
@@ -27,7 +27,7 @@
 {$block_header nofilter}
 <div class="row bg-light mb-2">
 	<div class="col-12">
-		<nav class="navbar navbar-expand-lg navbar-light border-0 bg-white py-2" data-observer-classes-off="" data-observer-margin="300px">
+		<nav class="navbar navbar-expand-lg navbar-light border-0 bg-white py-2 z-1" data-observer-classes-off="" data-observer-margin="300px">
 			<div class="container">
 			  <a class="navbar-brand" href="//{$site.url}"><img class="img-responsive" src="{if $site.logo}{$site.logo}{else}{$site.cdn}/{$template}/assets/logo.png{/if}" alt="Site Logo" style="max-width: min(200px, 35vw);"></a>
 				<div class="input-group d-none d-lg-flex mx-5 px-5">
@@ -50,10 +50,10 @@
 		        <i class="bi bi-tiktok fs-5"></i>
 		      </a>
 		      {/if}
-		      <a class="btn text-dark mt-1 pe-1" href="https://my.{$site.url}/account">
+		      <a class="btn text-dark mt-1 pe-1" href="https://{$site.account_url}/account">
 		      	<i class="bi bi-person-circle fs-5"></i>
 		      </a>
-		      <a class="btn text-dark mt-1 pe-1" href="https://my.{$site.url}/account/cart" data-url="https://my.{$site.url}/account/cart?sgframe=1" data-title="{'Shopping Cart'|trans}" data-bs-toggle="modalHide" data-bs-target="#dynamicModal">
+		      <a class="btn text-dark mt-1 pe-1" href="https://{$site.account_url}/account/cart" data-url="https://{$site.account_url}/account/cart?sgframe=1" data-title="{'Shopping Cart'|trans}" data-bs-toggle="modalHide" data-bs-target="#dynamicModal">
 		      	<i class="bi bi-cart3 fs-5 position-relative">{if $html.SGCartQty}<span class="position-absolute bg-dark rounded-circle text-white p-1 sg-cart-count">{$html.SGCartQty}</span>{/if}</i>
 		      </a>
 		    </div>

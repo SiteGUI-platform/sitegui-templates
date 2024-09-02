@@ -66,7 +66,7 @@
                       <tr>
                         <td style="font-family: 'Fira Sans', Helvetica, Arial, sans-serif; font-size: 17px; line-height: 30px; letter-spacing: -0.2px; color: #777777; padding: 0" valign="top">
                           Hello {$data.recipient},<br><br>
-                          {if $data.body}{$data.body}{elseif $data.content eq (array) $data.content}{$data.content.en}{else}{$data.content}{/if}
+                          {if $data.body}{$data.body}{else}{$data.content}{/if}
                         </td>
                       </tr>
                       <tr>

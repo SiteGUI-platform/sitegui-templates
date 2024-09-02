@@ -2,7 +2,7 @@
 <div id="footer" class="row">
 	<div class="">
 		<div class="container-md">
-			<div class="row">
+			<div class="row justify-content-md-end">
 				{foreach from=$html.footer_menu item=level1}
 				<div class="col-md-{math equation='x/y' x=9 y=$html.footer_menu|count format='%d'} p-3">
 				 	<div class="">

@@ -39,16 +39,15 @@
                             {if $variant.price < 0}{continue}{/if}
                             {$prices = $prices|cat: "<h5 class='js-sg-price {$variant.options_hex} {if $variant.stock gt 0}stocked{/if} {if $variant@index > 0}d-none{/if}' data-varid='{$variant.id}'><span class='js-sg-currency'>{$variant.price}</span> {if $variant.was > 0 AND $variant.was > $variant.price}(<span class='js-sg-currency text-decoration-line-through text-secondary'>{$variant.was}</span> -{(100*(1-$variant.price/$variant.was))|truncate:2:''}%){/if}</h5>"}
                             {foreach $variant.options AS $key => $opt}
-                                {if $opt@index > 2}{break}{/if}
+                                {*if $opt@index > 2}{break}{/if*}
                                 {if $opt@first AND $opt != (int) $opt}
                                     {if $variant.images.0}
                                         {$thumbs.$opt = $variant.images.0}
                                     {/if}    
                                     {$first_opts = $first_opts|cat: "<span class='d-none js-first-opt {$variant.options_hex}'>{$opt}</span>"}
                                 {/if}
-                                {*$api.variants.$index.options_hex = $api.variants.$index.options_hex|cat:" opt-{$opt@iteration}-{$opt|escape:'hex'|replace:'%':''}-x"*}
- 
-                                {$filters.$key.$opt = {$filters.$key.$opt}|cat: " {$variant.options_hex}"}
+
+                                {$filters.$key.$opt = "opt-{$opt@iteration}-{$opt|escape:'hex'|replace:'%':''}-x"}
                             {/foreach}
 
                             {foreach $variant.images AS $img}
@@ -132,9 +131,9 @@
                 {$prices nofilter}
                 {foreach $filters AS $key => $filter}
                     <h6>
-                    {foreach $filter AS $opt => $class}
-                        {$select = "opt-{$filter@iteration}-{$opt|escape:'hex'|replace:'%':''}-x"}
-                        {if $class@first}
+                    {foreach $filter AS $opt => $select}
+                        {*$select = "opt-{$filter@iteration}-{$opt|escape:'hex'|replace:'%':''}-x"*}
+                        {if $select@first}
                             <span class="me-3">{$key|trans}: </span>
                             {if $filter@first}
                                 {$first_opts nofilter}
@@ -144,7 +143,7 @@
                         <button 
                             data-row="opt-{$filter@iteration}" 
                             data-select="{$select}" 
-                            class="btn btn-sm border-1 border-dark my-2 position-relative {$class|replace:$select:''}" 
+                            class="btn btn-sm border-1 border-dark my-2 position-relative" 
                             {if $filter@first AND !$html.text_selection}
                                 style="padding: 2px;">
                                 {if $thumbs.$opt}
@@ -157,17 +156,17 @@
                                 </svg>
                             {else}
                                 >{$opt}
-                            {/if}
-                            
+                            {/if}                            
                         </button>                    
                     {/foreach}
                     </h6>
                 {/foreach}
                 {block name="content_right"}{$content_right nofilter}{/block}
+                {if $api.variants}
                 <form action="{$links.cart_add}" method="POST">
                     <input type="hidden" name="item[id]" value="{$api.variants.0.id}" id="js-varid-input" class="{if $html.stock_checking}js-require-stock{/if}">
                     <input type="hidden" name="csrf_token" value="{$token}">
-                    <button type="submit" class="btn btn-sm btn-warning my-3 me-3" id="js-cart-add">{'Add To Cart'|trans}</button>
+                    <button type="submit" class="btn btn-sm btn-warning my-3 me-3" id="js-cart-add" {if $html.stock_checking && $api.variants.0.stock lt 1}disabled{/if}>{'Add To Cart'|trans}</button>
                     {if $html.check_availability}
                     <button type="button" class="btn btn-sm btn-secondary my-3" id="js-check-availability">{'Check Stock Availability'|trans}</button>
                     <div class="collapse" id="collapse-availability">
@@ -185,7 +184,8 @@
                       </div>
                     </div>
                     {/if}
-                </form> 
+                </form>
+                {/if} 
                 {block name="content_top"}{$content_top nofilter}{/block}   
                 {$page.content nofilter}
                 <p class="mt-3">
@@ -293,7 +293,7 @@
                       <form action="{$links.cart_add}" method="POST">
                         <input type="hidden" name="item[id]" value="{$row.variants.0.id}">
                         <input type="hidden" name="csrf_token" value="{$token}">
-                        <button type="submit" class="btn btn-warning text-white m-2" {if $html.stock_checking && $variant.stock lt 1}disabled{/if}>{'Order'|trans}</button>
+                        <button type="submit" class="btn btn-warning text-white m-2" {if $html.stock_checking && $row.variants.0.stock lt 1}disabled{/if}>{'Order'|trans}</button>
                       </form>                             
                     {/if}  
                     </div>
@@ -387,84 +387,36 @@
 document.addEventListener("DOMContentLoaded", function(e){  
     $_ = document.querySelector.bind(document)
     $$ = document.querySelectorAll.bind(document)  
-    //disable out of stock
-    let classes = ''
-    $$('[data-varid]:not(.stocked)').forEach(el => {
-        classes += " "+ el.className //get all classes of out of stock varid so we can match
-    })
-    let matches = classes.match(/opt-\d-\w+-x/gi);    
-    matches && matches.forEach(opt => { 
-        //find all opt-i classes and check if they are present in at least one stocked variant or disable them
-        if ( !$_('[data-varid].stocked.'+ opt) ){
-            $_('[data-row][data-select='+ opt +']').disabled = true
-            $_('[data-row][data-select='+ opt +']').classList.add('text-decoration-line-through', 'sg-disabled')
+    var updateButtons = function(){
+        //resolve selected options
+        var selected = {}
+        var selector = ''
+        $$('[data-row][data-select].active').forEach(el => {
+            selected[ el.dataset.row ] = el.dataset.select
+            selector += '.'+ el.dataset.select
+        })     
+        //check each button
+        var stocked = $_('#js-varid-input.js-require-stock')? '.stocked' : '' //stock checking option
+        var buttons = $$('[data-row][data-select]')
+        if (buttons.length > 1){ //multiple choice - disable buttons until selection is reduced to 1
+            $_('#js-varid-input').setAttribute('value', '')
+            $_('#js-cart-add').disabled = true
+            $_('#js-check-availability') && ($_('#js-check-availability').disabled = true) 
         }
-    }) 
-
-    //variant selection
-    $$('[data-row][data-select]').forEach(el => {
-      el.addEventListener('click', ev => {
-        //console.log(ev, ev.target.dataset.select)
-        //set choosen btn active
-        $$('[data-row='+ el.dataset.row +']').forEach(key => {
-            key != el && key.classList.remove('active', 'btn-outline-warning')
-        })    
-        el.classList.toggle('active')
-        el.classList.toggle('btn-outline-warning')
-
-        //clear previous hidden carousel items
-        $$('#product-main-carousel .carousel-item-hide').forEach(hideEl => {
-            hideEl.classList.replace('carousel-item-hide', 'carousel-item')
-            hideEl.classList.remove('d-none', 'active')
-        })
-        $$('#product-main-carousel [data-bs-slide-to].d-none').forEach(hideEl => {
-            hideEl.classList.remove('d-none', 'active')
-        })
-        //clear disabled btns except out of stock ones
-        $$('[data-row].text-decoration-line-through:not(.sg-disabled):not([data-row='+ el.dataset.row +'])').forEach(hideEl => {
-            hideEl.disabled = false
-            hideEl.classList.remove('text-decoration-line-through')
-        }) 
-
-        //resolve selector
-        selector = ''
-        for (let i = 1; i < 4; i++) {
-            let o = $_('[data-row=opt-'+ i +'].active')? $_('[data-row=opt-'+ i +'].active').dataset.select : null
-            if ( o ) {
-                selector += '.'+ o
-                //disable unrelated options
-                $$('[data-row]:not(.'+ o +'):not([data-row=opt-'+ i +'])').forEach(key => {
-                    key.disabled = true
-                    key.classList.add('text-decoration-line-through')
-                }) 
-            }
-        }    
-
-        if (selector) {
-            //disable out of stock
-            $$('[data-varid]:not(.stocked)'+ selector).forEach(varid => {
-                matches = varid.className.match(/opt-\d-\w+-x/gi); //get opt- of out of stock varid and remove selector
-                let lastOpt = null //if it is the last opt- then disable it
-                matches && matches.forEach(opt => { 
-                    if ( !selector.includes(opt) ){
-                        if (lastOpt){
-                            lastOpt = false; 
-                            return;
-                        } else {
-                            lastOpt = opt
-                        }
-                    }
-                })
-                if (lastOpt){
-                    $_('[data-row][data-select='+ lastOpt +']').disabled = true
-                    $_('[data-row][data-select='+ lastOpt +']').classList.add('text-decoration-line-through')
-                } else if (lastOpt === null && $_('#js-varid-input.js-require-stock') ){
-                    //this combo is out of stock, click to disable
-                    el.click()
-                    //select first available in the same row $_('[data-row='+ el.dataset.row +']:not(.text-decoration-line-through)').click()
-                    return
-                }   
+        buttons.forEach(el => {
+            var test = stocked +'.'+ el.dataset.select
+            Object.keys(selected).forEach(row => {
+                if (row != el.dataset.row){ //exclude selected value of current row
+                    test += '.'+ selected[ row ]
+                }    
             })
+            //console.log(test)
+            if ( ! $_('[data-varid]'+ test) ){
+                el.disabled = true
+                el.classList.add('text-decoration-line-through')
+            }
+        })
+        if (selector) {
             //set selector item active        
             if ($_('#product-main-carousel .carousel-item'+ selector) ){
                 //hide carousel items
@@ -481,26 +433,52 @@ document.addEventListener("DOMContentLoaded", function(e){
                 $_('#product-main-carousel [data-bs-slide-to]'+ selector) && $_('#product-main-carousel [data-bs-slide-to]'+ selector).classList.add('active')            
             } 
             //display first option's text when any option is chosen (not just the 1st opt)
-            $$('.js-first-opt:not(.d-none)') && $$('.js-first-opt:not(.d-none)').forEach(el => el.classList.add('d-none') )
-            $$('.js-first-opt' + selector)   && $$('.js-first-opt' + selector).forEach(el => el.classList.remove('d-none') )    
+            $$('.js-first-opt:not(.d-none)').forEach(el => el.classList.add('d-none') )
+            $_('.js-first-opt' + selector) && $_('.js-first-opt' + selector).classList.remove('d-none') //first match only   
             //display price
             $_('[data-varid].js-sg-price:not(.d-none)') && $_('[data-varid].js-sg-price:not(.d-none)').classList.add('d-none')
-            //just select the first matched (stocked) varid
-            selector = $_('[data-varid].js-sg-price' + selector + ($_('#js-varid-input.js-require-stock')? '.stocked' : '') )
+            selector = $$('[data-varid].js-sg-price' + selector + stocked )
             if (selector) {
-                selector.classList.remove('d-none')
-                $_('#js-varid-input').setAttribute('value', selector.getAttribute('data-varid')) 
-            } else {
-                $_('#js-varid-input').setAttribute('value', '') 
+                //just show the first matched (stocked) varid's price but not select unless it is the single choice
+                selector[0].classList.remove('d-none')
+                $_('#js-cart-add').disabled = (selector.length != 1)
+                $_('#js-check-availability') && ($_('#js-check-availability').disabled = (selector.length != 1))  
+                $_('#js-varid-input').setAttribute('value', (selector.length == 1)? selector[0].getAttribute('data-varid') : '')
             }
         }
+    }     
+    //set click handler
+    $$('[data-row][data-select]').forEach(el => el.addEventListener('click', function(ev){
+        //console.log(ev, ev.target.dataset.select)
+        //set choosen btn active
+        $$('[data-row='+ el.dataset.row +']').forEach(key => {
+            key != el && key.classList.remove('active', 'btn-outline-warning')
+        })    
+        el.classList.toggle('active')
+        el.classList.toggle('btn-outline-warning')
 
-      })
-    })   
+        //clear previous hidden carousel items
+        $$('#product-main-carousel .carousel-item-hide').forEach(hideEl => {
+            hideEl.classList.replace('carousel-item-hide', 'carousel-item')
+            hideEl.classList.remove('d-none', 'active')
+        })
+        $$('#product-main-carousel [data-bs-slide-to].d-none').forEach(hideEl => {
+            hideEl.classList.remove('d-none', 'active')
+        })
+        //clear disabled btns 
+        $$('[data-row].text-decoration-line-through').forEach(hideEl => {
+            hideEl.disabled = false
+            hideEl.classList.remove('text-decoration-line-through')
+        }) 
+
+        updateButtons()
+    }))        
+    updateButtons() //initialize (disable out of stock button for example)
+
     // check valid varid before add to cart
     $_('#js-cart-add').addEventListener('click', ev => {
         if ( ! $_('#js-varid-input').getAttribute('value') ){
-            alert('Please select an option')
+            alert(Sitegui.trans('Please select an option'))
             ev.preventDefault()
         }
     })
@@ -510,7 +488,7 @@ document.addEventListener("DOMContentLoaded", function(e){
         $_('#collapse-availability ul').innerHTML = '<div class="text-center text-danger fw-bold"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
 
         if ( ! vid ){
-            alert('Please select an option')
+            alert(Sitegui.trans('Please select an option'))
             ev.preventDefault()
         } else {
             var http = new XMLHttpRequest();
