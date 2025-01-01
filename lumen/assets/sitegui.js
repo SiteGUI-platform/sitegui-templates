@@ -146,8 +146,8 @@ document.addEventListener("DOMContentLoaded", function(e){ //functions relying o
   //Quick Engagement button
   document.querySelectorAll('.js-sg-quick-engagement').forEach( el => {
     el.addEventListener('click', function(){
-      if ( document.querySelector(el.dataset.bsTarget +' form') && !this.classList.contains('sg-user-engaged') ){
-        document.querySelector(el.dataset.bsTarget +' form').submit()
+      if ( document.querySelector(el.dataset.bsTarget +' .js-submit-btn') && !this.classList.contains('sg-user-engaged') ){
+        document.querySelector(el.dataset.bsTarget +' .js-submit-btn').click()
       } 
     })    
   })

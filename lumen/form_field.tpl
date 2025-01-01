@@ -48,7 +48,7 @@
           <div class="input-group pb-2">
             <span class="input-group-text bg-transparent" role="button" data-bs-toggle="modal" data-bs-target="#dynamicModal" data-url="{if $file|truncate:4:'' ne 'http'}{$links.file_view}/{/if}{$file}" data-title="Preview"><i class="bi bi-eye"></i></span>
             <input class="form-control file-upload-indicator border-end-0" type="text" id="fid{$form_script_loaded}-{$keyid}-{$file@index}"  data-upload-name="{$fieldPrefix}[{$key}][ ]" name="{$fieldPrefix}[{$key}][ ]" value="{$file}" readonly>
-            {if $html.file_manager} 
+            {if $html.file_manager AND ($field.visibility != readonly OR !$field.value)} 
               <span class="input-group-text bg-transparent get-file-callback pe-auto" role="button" data-container="#fid{$form_script_loaded}-{$keyid}-{$file@index}" data-bs-toggle="modal" data-bs-target="#dynamicModal" data-title="File Manager"><i class="bi bi-upload"></i></span> 
             {/if}  
             <button class="input-group-text bg-transparent self-remove" type="button" ><i class="bi bi-x-lg"></i></button>
@@ -61,7 +61,7 @@
             type="text" name="{$fieldPrefix}[{$key}][ ]" data-container="#fid{$form_script_loaded}-{$keyid}" data-bs-toggle="modal" data-bs-target="#dynamicModal" data-title="{'File Manager'|trans}"
           {else}
             type="file" name="{$fieldPrefix}[{$key}][ ]" accept="image/*"
-          {/if} {if $field.is == required && $field.visibility != hidden}required{/if}>
+          {/if} {if $field.is == required && $field.visibility != hidden}required{/if}  {if $field.visibility == readonly AND $field.value}disabled{/if}>
           <label class="input-group-text bg-transparent" for="fid{$form_script_loaded}-{$keyid}" role="button"><i class="bi bi-upload"></i></label>
           {if $field.is == multiple}<span class="input-group-text bg-transparent add-another-input" role="button" ><i class="bi bi-plus-lg"></i></span>{/if}
         </div>
@@ -88,11 +88,11 @@
         <div class="input-group pb-2 {if $field.is != multiple && $field.value}d-none{/if}">
           <input id="fid{$form_script_loaded}-{$keyid}" class="form-control get-image-callback {if $field.is == multiple}multiple-values{/if}" data-container="#target{$form_script_loaded}-{$keyid}" data-name="{$fieldPrefix}[{$key}][ ]" 
           {if $html.file_manager}
-            type="text" name2="{$fieldPrefix}[{$key}][ ]" data-bs-toggle="modal" data-bs-target="#dynamicModal" data-title="{'File Manager'|trans}"
+            type="text" name="{$fieldPrefix}[{$key}][ ]" data-bs-toggle="modal" data-bs-target="#dynamicModal" data-title="{'File Manager'|trans}"
           {else}
-            type="file" name2="{$fieldPrefix}[{$key}][ ]" accept="image/*"
-          {/if} {if $field.is == required && !$field.value && $field.visibility != hidden}required{/if}>
-          {if $html.file_manager}
+            type="file" name="{$fieldPrefix}[{$key}][ ]" accept="image/*"
+          {/if} {if $field.is == required && !$field.value && $field.visibility != hidden}required{/if} {if $field.visibility == readonly AND $field.value}disabled{/if}>
+          {if $html.file_manager AND ($field.visibility != readonly OR !$field.value)}
             <label class="input-group-text bg-transparent" for="fid{$form_script_loaded}-{$keyid}" role="button"><i class="bi bi-upload"></i></label>
           {/if}
         </div>  
@@ -102,8 +102,8 @@
           <option value="0" {if $field.value == 0}selected{/if}>No</option>
         </select-->
         <div class="btn-group form-switch-radio col-form-label me-2 mb-1 pt-2" role="group">{* inputs first, order is important for css selector *}
-          <input type="radio" class="btn-check btn-off" name="{$fieldPrefix}[{$key}]" id="cid{$form_script_loaded}-{$keyid}-0" value="0" autocomplete="off" {if !$field.value}checked{/if} {if $field.is == required && $field.visibility != hidden}required{/if}>
-          <input type="radio" class="btn-check btn-on" name="{$fieldPrefix}[{$key}]" id="cid{$form_script_loaded}-{$keyid}-1" value="1" autocomplete="off" {if $field.value}checked{/if} {if $field.is == required && $field.visibility != hidden}required{/if}>
+          <input type="radio" class="btn-check btn-off" name="{$fieldPrefix}[{$key}]" id="cid{$form_script_loaded}-{$keyid}-0" value="0" autocomplete="off" {if !$field.value}checked{/if} {if $field.is == required && $field.visibility != hidden}required{/if} {if $field.visibility == readonly AND $field.value}disabled{/if}>
+          <input type="radio" class="btn-check btn-on" name="{$fieldPrefix}[{$key}]" id="cid{$form_script_loaded}-{$keyid}-1" value="1" autocomplete="off" {if $field.value}checked{/if} {if $field.is == required && $field.visibility != hidden}required{/if} {if $field.visibility == readonly AND $field.value}disabled{/if}>
           <label class="btn btn-off btn-sm btn-outline-secondary border-end-0" for="cid{$form_script_loaded}-{$keyid}-0"></label>
           <label class="btn btn-on btn-sm btn-outline-primary border-start-0" for="cid{$form_script_loaded}-{$keyid}-1"></label>
         </div>
@@ -143,20 +143,20 @@
         {foreach $field.options AS $option => $label}
           {if $option AND $label}
           <div class="form-check col-form-label">
-            <input class="form-check-input" type="radio" name="{$fieldPrefix}[{$key}]" id="field{$form_script_loaded}-{$option}" value="{$option}" {if $option == $field.value}checked{/if} {if $field.is == required && $field.visibility != hidden}required{/if}>
+            <input class="form-check-input" type="radio" name="{$fieldPrefix}[{$key}]" id="field{$form_script_loaded}-{$option}" value="{$option}" {if $option == $field.value}checked{/if} {if $field.is == required && $field.visibility != hidden}required{/if} {if $field.visibility == readonly AND $field.value}disabled{/if}>
             <label class="form-check-label" for="field{$form_script_loaded}-{$option}">{$label|trans}</label>
           </div>
           {/if}
         {/foreach}
       {elseif $field.type == 'radio hover'}
-        <div class="sg-radio-hover" role="button">
+        <div class="sg-radio-hover" role="button" {if $field.visibility == readonly AND $field.value}disabled{/if}>
           {if $field.value == (array) $field.value}
             {foreach $field.value AS $label}
               {$field.value = $label}
             {/foreach}
           {/if}  
           {foreach $field.options AS $label}
-            <input type="radio" name="{$fieldPrefix}[{$key}]" id="rhover{$form_script_loaded}-{$keyid}{$label@index}" value="{$label}" {if $label eq $field.value OR $label@first}checked{/if}><label for="rhover{$form_script_loaded}-{$keyid}{$label@index}">{$label|trans}</label>
+            <input type="radio" name="{$fieldPrefix}[{$key}]" id="rhover{$form_script_loaded}-{$keyid}{$label@index}" value="{$label}" {if $label eq $field.value OR $label@first}checked{/if} {if $field.visibility == readonly AND $field.value}disabled{/if}><label for="rhover{$form_script_loaded}-{$keyid}{$label@index}">{$label|trans}</label>
           {/foreach}
         </div>
         <style type="text/css">
@@ -165,7 +165,7 @@
             display:none;
           }
           .sg-radio-hover input:checked + label,
-          .sg-radio-hover:hover label,
+          .sg-radio-hover:not([disabled]):hover label,
           .sg-radio-hover:active .label {
             display: inline;
           }
@@ -246,97 +246,101 @@
           <div class="input-group-text"><i class="bi bi-hourglass{if $field.value}-bottom{/if}"></i></div>
         </div>
       {elseif $field.type == 'date' OR $field.type == 'time'}
-        <div class="input-group">
-          <input name="{$fieldPrefix}[{$key}]" type="text" id="{$field.type}{$form_script_loaded}-{$keyid}" class="form-control {$field.type}picker-input datetimepicker-input" data-target="#{$field.type}{$form_script_loaded}-{$keyid}" data-toggle="datetimepicker" value="{$field.value}" placeholder="{$field.type|capitalize|trans}"/> 
-          <span class="bi bi-calendar2-event input-group-text bg-transparent" data-target="#{$field.type}{$form_script_loaded}-{$keyid}" data-toggle="datetimepicker"></span>
-        </div>
-        {if ! $datetime_script_loaded}
-          {$datetime_script_loaded = 1 scope="global"}
-          <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
-          <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.31/moment-timezone-with-data.js"></script>
-          <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
-          <script type="text/javascript" >
-            document.addEventListener("DOMContentLoaded", function(e){
-              $('.datetimepicker-input').closest('form').submit(function(ev) {
-                ev.preventDefault()
-                let that = $(this)
-                $('.datetimepicker-input').each(function() {
-                  if ( ! $(this).val() || $(this).is('.datetimepicker-timestamp') ){
-                    return true;
-                  } else {
-                    $(this).addClass('datetimepicker-timestamp')
-                  }
-                  $(this).clone().addClass('d-none').val(
-                    $(this).datetimepicker("viewDate").unix()
-                  ).appendTo(that)
-                })
-                this.submit()
-              }) 
-              Sitegui.initDatePicker = function (parent = 'body'){
-                $(parent).find('.datepicker-input').each(function() {
-                  let option = {
-                    format: 'L',
-                    locale: "{$site.locale|default:$user.language|default:$site.language}", 
-                    timeZone: '{$user.timezone|default:$site.timezone}',   
-                    icons: {
-                      previous: 'bi bi-chevron-left',
-                      next: 'bi bi-chevron-right',
-                    },
-                  }
-                  if ($(this).attr('value')){
-                    option.defaultDate = new Date($(this).attr('value') * 1000).toLocaleDateString("en-CA", {
-                      timeZone: '{$user.timezone|default:$site.timezone}', hour12: false,
-                    })
-                    $(this).removeAttr('value') //required for picker to work
-                  }
-                  $(this).datetimepicker(option)
-                  this.style.opacity = 1  
+        {if $field.visibility == readonly AND $field.value}
+          <div class="col-form-label js-sg-{$field.type}">{$field.value}</div>
+        {else}
+          <div class="input-group">
+            <input name="{$fieldPrefix}[{$key}]" type="text" id="{$field.type}{$form_script_loaded}-{$keyid}" class="form-control {$field.type}picker-input datetimepicker-input" data-target="#{$field.type}{$form_script_loaded}-{$keyid}" data-toggle="datetimepicker" value="{$field.value}" placeholder="{$field.type|capitalize|trans}"/> 
+            <span class="bi bi-calendar2-event input-group-text bg-transparent" data-target="#{$field.type}{$form_script_loaded}-{$keyid}" data-toggle="datetimepicker"></span>
+          </div>
+          {if ! $datetime_script_loaded}
+            {$datetime_script_loaded = 1 scope="global"}
+            <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
+            <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.31/moment-timezone-with-data.js"></script>
+            <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+            <script type="text/javascript" >
+              document.addEventListener("DOMContentLoaded", function(e){
+                $('.datetimepicker-input').closest('form').submit(function(ev) {
+                  ev.preventDefault()
+                  let that = $(this)
+                  $('.datetimepicker-input').each(function() {
+                    if ( ! $(this).val() || $(this).is('.datetimepicker-timestamp') ){
+                      return true;
+                    } else {
+                      $(this).addClass('datetimepicker-timestamp')
+                    }
+                    $(this).clone().addClass('d-none').val(
+                      $(this).datetimepicker("viewDate").unix()
+                    ).appendTo(that)
+                  })
+                  this.submit()
                 }) 
-              } 
-              Sitegui.initTimePicker = function (parent = 'body'){
-                $(parent).find('.timepicker-input').each(function() {
-                  let option = {
-                    locale: "{$site.locale|default:$user.language|default:$site.language}", 
-                    timeZone: '{$user.timezone|default:$site.timezone}',   
-                    icons: {
-                      time: 'bi bi-clock',
-                      date: 'bi bi-calendar-day',
-                      previous: 'bi bi-chevron-left',
-                      next: 'bi bi-chevron-right',
-                      up:   'bi bi-chevron-up',
-                      down: 'bi bi-chevron-down',
-                    },
-                  }
-                  if ($(this).attr('value')){
-                    option.defaultDate = new Date($(this).attr('value') * 1000).toLocaleString("en-CA", {
-                      timeZone: '{$user.timezone|default:$site.timezone}', hour12: false,
-                    }).replace(', ', 'T')
-                    $(this).removeAttr('value') //required for picker to work
-                  }
-                  $(this).datetimepicker(option)
-                  this.style.opacity = 1  
-                }) 
-              } 
-            });    
-          </script> 
-        {/if} 
-        {if ! $date_script_loaded AND $field.type == 'date'}
-          {$date_script_loaded = 1 scope="global"}
-          <script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function(e){
-              Sitegui.initDatePicker() 
-            })
-          </script>
-        {/if}
-        {if ! $time_script_loaded AND $field.type == 'time'}
-          {$time_script_loaded = 1 scope="global"}
-          <script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function(e){
-              Sitegui.initTimePicker() 
-            })
-          </script>
-        {/if}
+                Sitegui.initDatePicker = function (parent = 'body'){
+                  $(parent).find('.datepicker-input').each(function() {
+                    let option = {
+                      format: 'L',
+                      locale: "{$site.locale|default:$user.language|default:$site.language}", 
+                      timeZone: '{$user.timezone|default:$site.timezone}',   
+                      icons: {
+                        previous: 'bi bi-chevron-left',
+                        next: 'bi bi-chevron-right',
+                      },
+                    }
+                    if ($(this).attr('value')){
+                      option.defaultDate = new Date($(this).attr('value') * 1000).toLocaleDateString("en-CA", {
+                        timeZone: '{$user.timezone|default:$site.timezone}', hour12: false,
+                      })
+                      $(this).removeAttr('value') //required for picker to work
+                    }
+                    $(this).datetimepicker(option)
+                    this.style.opacity = 1  
+                  }) 
+                } 
+                Sitegui.initTimePicker = function (parent = 'body'){
+                  $(parent).find('.timepicker-input').each(function() {
+                    let option = {
+                      locale: "{$site.locale|default:$user.language|default:$site.language}", 
+                      timeZone: '{$user.timezone|default:$site.timezone}',   
+                      icons: {
+                        time: 'bi bi-clock',
+                        date: 'bi bi-calendar-day',
+                        previous: 'bi bi-chevron-left',
+                        next: 'bi bi-chevron-right',
+                        up:   'bi bi-chevron-up',
+                        down: 'bi bi-chevron-down',
+                      },
+                    }
+                    if ($(this).attr('value')){
+                      option.defaultDate = new Date($(this).attr('value') * 1000).toLocaleString("en-CA", {
+                        timeZone: '{$user.timezone|default:$site.timezone}', hour12: false,
+                      }).replace(', ', 'T')
+                      $(this).removeAttr('value') //required for picker to work
+                    }
+                    $(this).datetimepicker(option)
+                    this.style.opacity = 1  
+                  }) 
+                } 
+              });    
+            </script> 
+          {/if} 
+          {if ! $date_script_loaded AND $field.type == 'date'}
+            {$date_script_loaded = 1 scope="global"}
+            <script type="text/javascript">
+              document.addEventListener("DOMContentLoaded", function(e){
+                Sitegui.initDatePicker() 
+              })
+            </script>
+          {/if}
+          {if ! $time_script_loaded AND $field.type == 'time'}
+            {$time_script_loaded = 1 scope="global"}
+            <script type="text/javascript">
+              document.addEventListener("DOMContentLoaded", function(e){
+                Sitegui.initTimePicker() 
+              })
+            </script>
+          {/if}
+        {/if}  
       {elseif $field.type == 'textarea'}
         <textarea class="form-control" name="{$fieldPrefix}[{$key}]" rows="{$field.rows|default: 4}" cols="{$field.cols}" {if $field.is == required && $field.visibility != hidden}required{/if} {if $field.visibility == readonly && $field.value}readonly{/if}>{if $field.value}{$field.value}{/if}</textarea> 
       {elseif $field.type == 'country'}

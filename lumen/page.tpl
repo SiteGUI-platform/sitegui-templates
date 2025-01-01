@@ -74,7 +74,7 @@
                     {foreach $api.subapp AS $name => $subapp}
                         {if ! $subapp.hide.tabapp }
                           <li class="nav-item {if $api.app.sub.$name.entry eq quick AND $user.id}ms-auto order-last{/if}">
-                            <button type="button" class="nav-link position-relative mt-0 {if $api.app.sub.$name.entry eq quick AND $user.id}border-0 js-sg-quick-engagement{/if} {if $subapp@first}active{/if}" data-bs-toggle="tab" data-bs-target="#app-{$name}-tabpane" role="tab" aria-controls="app-{$name}-tabpane" aria-selected="false">{$api.app.sub.$name.alias|default:($name|replace:'_':' ')|trans}</button>   
+                            <button type="button" class="nav-link position-relative mt-0 {if $api.app.sub.$name.entry eq quick AND $user.id}border-0 js-sg-quick-engagement js-app-{$name}-captcha{/if} {if $subapp@first}active{/if}" data-bs-toggle="tab" data-bs-target="#app-{$name}-tabpane" role="tab" aria-controls="app-{$name}-tabpane" aria-selected="false">{$api.app.sub.$name.alias|default:($name|replace:'_':' ')|trans}</button>   
                           </li> 
                         {/if}
                     {/foreach}
@@ -112,11 +112,17 @@
                                         {if $user.id}    
                                             {include "form_field.tpl" formFields=$subapp.fields fieldPrefix="page[sub][$name][fields]"}
                                             {include "form_field.tpl" formFields=$subapp.show   fieldPrefix="page[sub][$name]"}
+                                            {if $html.challenge_captcha}
+                                                <div class="position-absolute mt-1">
+                                                    <script async defer src="https://cdn.jsdelivr.net/npm/altcha/dist/altcha.min.js" type="module"></script>
+                                                    <altcha-widget challengejson="{$html.challenge_captcha}" floating hidelogo hidefooter></altcha-widget>
+                                                </div>
+                                            {/if}
                                             <div class="text-center">
                                                 <input type="hidden" name="page[id]" value="{$api.page.id}">    
                                                 <input type="hidden" name="page[subtype]" value="{$api.page.subtype}">
                                                 <input type="hidden" name="csrf_token" value="{$api.page.id}sg{$token}">
-                                                <button type="submit" name="save-btn" id="sg-btn-save" class="btn btn-outline-primary my-2" {$onclick}><i class="bi bi-save pe-2"></i>  {'Submit'|trans}</button>
+                                                <button type="submit" name="save-btn" class="js-submit-btn btn btn-outline-primary my-2" {$onclick}><i class="bi bi-save pe-2"></i>  {'Submit'|trans}</button>
                                             </div>
                                         {else}
                                             <div class="text-center">

@@ -1094,8 +1094,14 @@
 		{if ($api.rowCount AND !$api.rows) OR $html.ajax}
 			apiUrl = {if $links.custom_api}"{$links.custom_api}".replaceAll('&amp;', '&'){elseif $links.subapp}"{$links.subapp}.json?subapp={$forapp}&html=1"{else}"{$links.api}.json?html=1"{/if}
 		{/if}
-
-		sgView.initBootgrid("#{$table}", apiUrl)
+		
+		{if !$data_onclick}	
+			sgView.initBootgrid("#{$table}", apiUrl)
+		{elseif $forapp}
+			$('[data-bs-target="#tab-{$forapp}"]').on('click', function(){
+				sgView.initBootgrid("#{$table}", apiUrl)
+			})
+		{/if}	
 
 		//force ajax loading for other apps
 		{if !$forapp AND (($api.rowCount AND !$api.rows) OR $html.ajax) } //if table is not provided via ajax, column will not be removed completely when destroyed

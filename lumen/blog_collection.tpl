@@ -30,7 +30,7 @@
     <h6 class="ps-3 pb-2">{'Categories'|trans}</h6>
     <ul class="list-group">
     {foreach $api.has_collections AS $collection}
-      {if $collection.location}{continue}{/if}
+      {*if $collection.location}{continue}{/if*}
       <a href="{$collection.slug}" class="list-group-item d-flex justify-content-between align-items-center">
         {$collection.name}
         {if $collection.quantity}

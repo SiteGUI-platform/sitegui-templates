@@ -43,7 +43,7 @@
         <div class="progress" style="height: 5px; width:100%; position: absolute;">
           <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
         </div>
-        <iframe id="dynamicModalFrame" src="" data-src="{$html.file_manager}" style="zoom:0.60" width="100%" height="100%" frameborder="0"></iframe>
+        <iframe id="dynamicModalFrame" src="" data-src="{$html.file_manager}" style="zoom:1" width="100%" height="100%" frameborder="0"></iframe>
         <div class="clearfix"></div>
       </div>
     </div>
